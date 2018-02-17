@@ -8,21 +8,21 @@
 
     <meta name="description" content="{{#translate}}Self hosted email newsletter app{{/translate}}">
     <meta name="author" content="Andris Reinman">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="{{baseDir}}/favicon.ico">
 
     <title>Mailtrain
         {{#if title}} | {{title}}{{/if}}
     </title>
 
-    <link rel="stylesheet" href="/bootstrap/themes/united.min.css">
-    <link rel="stylesheet" href="/datatables/datatables.min.css">
+    <link rel="stylesheet" href="{{baseDir}}/bootstrap/themes/united.min.css">
+    <link rel="stylesheet" href="{{baseDir}}/datatables/datatables.min.css">
 
-    <link rel="stylesheet" href="/datepicker/css/bootstrap-datepicker3.css">
-    <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/mailtrain.css">
+    <link rel="stylesheet" href="{{baseDir}}/datepicker/css/bootstrap-datepicker3.css">
+    <link rel="stylesheet" href="{{baseDir}}/css/footer.css">
+    <link rel="stylesheet" href="{{baseDir}}/css/mailtrain.css">
 
     {{#if useEditor}}
-        <link rel="stylesheet" href="/summernote/summernote.css">
+        <link rel="stylesheet" href="{{baseDir}}/summernote/summernote.css">
     {{/if}}
 
     {{#each customStyles}}
@@ -47,7 +47,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-envelope"></i> Mailtrain</a>
+                <a class="navbar-brand" href="{{baseDir}}/"><i class="glyphicon glyphicon-envelope"></i> Mailtrain</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -73,27 +73,27 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="/users/account">
+                                    <a href="{{baseDir}}/users/account">
                                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{#translate}}Account{{/translate}}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/settings">
+                                    <a href="{{baseDir}}/settings">
                                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{#translate}}Settings{{/translate}}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/blacklist">
+                                    <a href="{{baseDir}}/blacklist">
                                         <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> {{#translate}}Blacklist{{/translate}}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/users/api">
+                                    <a href="{{baseDir}}/users/api">
                                         <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span> {{#translate}}API{{/translate}}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/users/logout">
+                                    <a href="{{baseDir}}/users/logout">
                                         <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> {{#translate}}Log out{{/translate}}
                                     </a>
                                 </li>
@@ -105,7 +105,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="/users/login" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a href="{{baseDir}}/users/login" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> {{#translate}}Sign in{{/translate}}
                             </a>
                         </li>
@@ -126,7 +126,7 @@
                     {{{shoutout}}}
                 </div>
 
-                <h1><img class="img-responsive" src="/mailtrain-header.png"></h1>
+                <h1><img class="img-responsive" src="{{baseDir}}/mailtrain-header.png"></h1>
                 <p>{{#translate}}Self Hosted Newsletter App Built on Top of Nodemailer{{/translate}}</p>
                 <p>
                     <a class="btn btn-info btn-md" href="https://github.com/Mailtrain-org/mailtrain" role="button"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> {{#translate}}Source on GitHub{{/translate}}</a>
@@ -151,19 +151,19 @@
         </div>
     </footer>
 
-    <script src="/javascript/jquery-2.2.1.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{baseDir}}/javascript/jquery-2.2.1.min.js"></script>
+    <script src="{{baseDir}}/bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="/datepicker/js/bootstrap-datepicker.min.js"></script>
-    <script src="/datatables/datatables.min.js"></script>
-    <script src="/moment/moment.min.js"></script>
-    <script src="/javascript/tables.js"></script>
-    <script src="/javascript/fetch.js"></script>
+    <script src="{{baseDir}}/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="{{baseDir}}/datatables/datatables.min.js"></script>
+    <script src="{{baseDir}}/moment/moment.min.js"></script>
+    <script src="{{baseDir}}/javascript/tables.js"></script>
+    <script src="{{baseDir}}/javascript/fetch.js"></script>
 
     {{#if useEditor}}
-        <script src="/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/summernote/summernote.min.js"></script>
-        <script src="/javascript/editor.js"></script>
+        <script src="{{baseDir}}/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{{baseDir}}/summernote/summernote.min.js"></script>
+        <script src="{{baseDir}}/javascript/editor.js"></script>
     {{/if}}
 
     {{> tracking_scripts}}

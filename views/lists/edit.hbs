@@ -1,20 +1,20 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{id}}">{{name}}</a></li>
     <li class="active">{{#translate}}Edit List{{/translate}}</li>
 </ol>
 
-<h2>{{#translate}}Edit List{{/translate}} <a class="btn btn-default btn-xs" href="/lists/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View List{{/translate}}</a></h2>
+<h2>{{#translate}}Edit List{{/translate}} <a class="btn btn-default btn-xs" href="{{baseDir}}/lists/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View List{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="lists-delete" action="/lists/delete">
+<form method="post" class="delete-form" id="lists-delete" action="{{baseDir}}/lists/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}">
 </form>
 
-<form class="form-horizontal" method="post" action="/lists/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/lists/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
     
@@ -50,7 +50,7 @@
                     <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
                 {{/each}}
             </select>
-            <span class="help-block">{{#translate}}The custom form used for this list. You can create a form <a href="/forms/{{id}}/create">here</a>.{{/translate}}</span>
+            <span class="help-block">{{#translate}}The custom form used for this list. You can create a form <a href="{{baseDir}}/forms/{{id}}/create">here</a>.{{/translate}}</span>
         </div>
     </div>
 

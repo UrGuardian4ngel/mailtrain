@@ -1,14 +1,14 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
     {{#if parent}}
-        <li><a href="/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
+        <li><a href="{{baseDir}}/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
     {{/if}}
-    <li><a href="/campaigns/view/{{id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/campaigns/view/{{id}}">{{name}}</a></li>
     <li class="active">{{#translate}}Edit RSS Campaign{{/translate}}</li>
 </ol>
 
-<h2>{{#translate}}Edit RSS Campaign{{/translate}} <a class="btn btn-default btn-xs" href="/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
+<h2>{{#translate}}Edit RSS Campaign{{/translate}} <a class="btn btn-default btn-xs" href="{{baseDir}}/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
 
 <hr>
 
@@ -18,12 +18,12 @@
     </div>
 </div>
 
-<form method="post" class="delete-form" id="campaigns-delete" action="/campaigns/delete">
+<form method="post" class="delete-form" id="campaigns-delete" action="{{baseDir}}/campaigns/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 </form>
 
-<form class="form-horizontal" method="post" action="/campaigns/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/campaigns/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 

@@ -1,10 +1,10 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
     <li class="active">{{#translate}}Automation Triggers{{/translate}}</li>
 </ol>
 
 <div class="pull-right">
-    <a class="btn btn-primary" href="/triggers/create-select" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Trigger{{/translate}}</a>
+    <a class="btn btn-primary" href="{{baseDir}}/triggers/create-select" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Trigger{{/translate}}</a>
 </div>
 
 <h2>{{#translate}}Automation Triggers{{/translate}}</h2>
@@ -64,20 +64,20 @@
                             {{description}}
                         </td>
                         <td class="text-info">
-                            <a href="/lists/view/{{list}}">{{listName}}</a>
+                            <a href="{{baseDir}}/lists/view/{{list}}">{{listName}}</a>
                         </td>
                         <td class="text-info">
                             {{{formatted}}}
                         </td>
                         <td class="text-info">
-                            <a href="/campaigns/view/{{destCampaign}}">{{destCampaignName}}</a>
+                            <a href="{{baseDir}}/campaigns/view/{{destCampaign}}">{{destCampaignName}}</a>
                         </td>
                         <td>
-                            <a href="/triggers/status/{{id}}">{{count}}</a>
+                            <a href="{{baseDir}}/triggers/status/{{id}}">{{count}}</a>
                         </td>
                         <td>
                             <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                            <a href="/triggers/edit/{{id}}">
+                            <a href="{{baseDir}}/triggers/edit/{{id}}">
                             {{#translate}}Edit{{/translate}}
                         </a>
                         </td>

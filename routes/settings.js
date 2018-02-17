@@ -21,7 +21,7 @@ let allowedKeys = ['service_url', 'smtp_hostname', 'smtp_port', 'smtp_encryption
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('/settings');
     next();
@@ -113,7 +113,7 @@ router.post('/update', passport.parseForm, passport.csrfProtection, (req, res) =
                 });
             });
             req.flash('success', _('Settings updated'));
-            return res.redirect('/settings');
+            return res.redirect(config.www.baseDir + '/settings');
         }
         let key = keys[i];
         let value = values[i];
@@ -122,7 +122,7 @@ router.post('/update', passport.parseForm, passport.csrfProtection, (req, res) =
         settings.set(key, value, err => {
             if (err) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/settings');
+                return res.redirect(config.www.baseDir + '/settings');
             }
             storeSettings();
         });

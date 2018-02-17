@@ -1,19 +1,19 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/triggers/">{{#translate}}Automation Triggers{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/triggers/">{{#translate}}Automation Triggers{{/translate}}</a></li>
     <li class="active">{{#translate}}Edit Trigger{{/translate}}</li>
 </ol>
 
-<h2>{{#translate}}Edit Trigger{{/translate}} <a class="btn btn-default btn-xs" href="/triggers/" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to triggers{{/translate}}</a></h2>
+<h2>{{#translate}}Edit Trigger{{/translate}} <a class="btn btn-default btn-xs" href="{{baseDir}}/triggers/" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to triggers{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="triggers-delete" action="/triggers/delete">
+<form method="post" class="delete-form" id="triggers-delete" action="{{baseDir}}/triggers/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 </form>
 
-<form class="form-horizontal" method="post" action="/triggers/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/triggers/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 
@@ -43,7 +43,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{#translate}}List{{/translate}}</label>
         <div class="col-sm-10">
-            <p class="form-control-static"><a href="/lists/view/{{list.id}}">{{list.name}}</a> <span class="text-muted"> – {{list.subscribers}} {{#translate}}subscribers{{/translate}}</span></p>
+            <p class="form-control-static"><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a> <span class="text-muted"> – {{list.subscribers}} {{#translate}}subscribers{{/translate}}</span></p>
         </div>
     </div>
 

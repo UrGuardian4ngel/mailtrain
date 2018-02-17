@@ -16,7 +16,7 @@ let _ = require('../lib/translate')._;
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('templates');
     next();
@@ -82,10 +82,10 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
     templates.create(req.body, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create template'));
-            return res.redirect('/templates/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/templates/create?' + tools.queryParams(req.body));
         }
         req.flash('success', _('Template created'));
-        res.redirect('/templates/edit/' + id);
+        res.redirect(config.www.baseDir + '/templates/edit/' + id);
     });
 });
 
@@ -93,7 +93,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
     templates.get(req.params.id, (err, template) => {
         if (err || !template) {
             req.flash('danger', err && err.message || err || _('Could not find template with specified ID'));
-            return res.redirect('/templates');
+            return res.redirect(config.www.baseDir + '/templates');
         }
         settings.list(['disableWysiwyg'], (err, configItems) => {
             if (err) {
@@ -103,7 +103,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
             helpers.getDefaultMergeTags((err, defaultMergeTags) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/templates');
+                    return res.redirect(config.www.baseDir + '/templates');
                 }
 
                 template.mergeTags = defaultMergeTags;
@@ -129,9 +129,9 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
         }
 
         if (req.body.id) {
-            return res.redirect('/templates/edit/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/templates/edit/' + encodeURIComponent(req.body.id));
         } else {
-            return res.redirect('/templates');
+            return res.redirect(config.www.baseDir + '/templates');
         }
     });
 });
@@ -145,7 +145,7 @@ router.post('/duplicate', passport.parseForm, passport.csrfProtection, (req, res
         } else {
             req.flash('info', _('Could not duplicate specified template'));
         }
-        return res.redirect('/templates/edit/' + duplicated);
+        return res.redirect(config.www.baseDir + '/templates/edit/' + duplicated);
     });
 });
 
@@ -159,7 +159,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified template'));
         }
 
-        return res.redirect('/templates');
+        return res.redirect(config.www.baseDir + '/templates');
     });
 });
 
@@ -180,7 +180,7 @@ router.post('/ajax', (req, res) => {
                 (Number(req.body.start) || 0) + 1 + i,
                 '<span class="glyphicon glyphicon-file" aria-hidden="true"></span> ' + htmlescape(row.name || ''),
                 htmlescape(striptags(row.description) || ''),
-                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/templates/edit/' + row.id + '">' + _('Edit') + '</a>' ]
+                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/templates/edit/' + row.id + '">' + _('Edit') + '</a>' ]
             )
         });
     });

@@ -1,5 +1,6 @@
 'use strict';
 
+let config = require('config');
 let settings = require('../lib/models/settings');
 let campaigns = require('../lib/models/campaigns');
 let links = require('../lib/models/links');
@@ -18,13 +19,13 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
     settings.get('serviceUrl', (err, serviceUrl) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         campaigns.getByCid(req.params.campaign, (err, campaign) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             if (!campaign) {
@@ -36,7 +37,7 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
             lists.getByCid(req.params.list, (err, list) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/');
+                    return res.redirect(config.www.baseDir + '/');
                 }
 
                 if (!list) {
@@ -48,7 +49,7 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
                 subscriptions.getWithMergeTags(list.id, req.params.subscription, (err, subscription) => {
                     if (err) {
                         req.flash('danger', err.message || err);
-                        return res.redirect('/');
+                        return res.redirect(config.www.baseDir + '/');
                     }
 
                     if (!subscription) {
@@ -60,7 +61,7 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
                     campaigns.getAttachments(campaign.id, (err, attachments) => {
                         if (err) {
                             req.flash('danger', err.message || err);
-                            return res.redirect('/');
+                            return res.redirect(config.www.baseDir + '/');
                         }
 
                         let renderHtml = (html, renderTags) => {
@@ -99,7 +100,7 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
                             links.updateLinks(campaign, list, subscription, serviceUrl, html, (err, html) => {
                                 if (err) {
                                     req.flash('danger', err.message || err);
-                                    return res.redirect('/');
+                                    return res.redirect(config.www.baseDir + '/');
                                 }
                                 renderHtml(html, renderTags);
                             });
@@ -139,7 +140,7 @@ router.get('/:campaign/:list/:subscription', passport.csrfProtection, (req, res,
 });
 
 router.post('/attachment/download', passport.parseForm, passport.csrfProtection, (req, res) => {
-    let url = '/archive/' + encodeURIComponent(req.body.campaign || '') + '/' + encodeURIComponent(req.body.list || '') + '/' + encodeURIComponent(req.body.subscription || '');
+    let url = config.www.baseDir + '/archive/' + encodeURIComponent(req.body.campaign || '') + '/' + encodeURIComponent(req.body.list || '') + '/' + encodeURIComponent(req.body.subscription || '');
     campaigns.getByCid(req.body.campaign, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));

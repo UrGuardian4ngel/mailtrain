@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
     <li class="active">{{#translate}}Sign in{{/translate}}</li>
 </ol>
 
@@ -7,7 +7,7 @@
 
 <hr>
 
-<form class="form-horizontal" role="login" method="post" action="/users/login">
+<form class="form-horizontal" role="login" method="post" action="{{baseDir}}/users/login">
     <input type="hidden" name="next" value="{{next}}" />
     <div class="form-group">
         <label for="usernameMain" class="col-sm-2 control-label">{{#translate}}Username{{/translate}}</label>
@@ -36,7 +36,7 @@
             {{#if ldap.enabled}}
                 <a href="{{ldap.passwordresetlink}}">{{#translate}}Forgot password?{{/translate}}</a>
             {{else}}
-                <a href="/users/forgot">{{#translate}}Forgot password?{{/translate}}</a>
+                <a href="{{baseDir}}/users/forgot">{{#translate}}Forgot password?{{/translate}}</a>
             {{/if}}
         </div>
     </div>

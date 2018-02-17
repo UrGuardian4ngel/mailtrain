@@ -1,36 +1,36 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
     {{#if parent}}
-        <li><a href="/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
+        <li><a href="{{baseDir}}/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
     {{/if}}
-    <li><a href="/campaigns/view/{{id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/campaigns/view/{{id}}">{{name}}</a></li>
     <li class="active">{{#translate}}Edit Campaign{{/translate}}</li>
 </ol>
 
-<h2>{{#translate}}Edit Campaign{{/translate}} <a class="btn btn-default btn-xs" href="/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
+<h2>{{#translate}}Edit Campaign{{/translate}} <a class="btn btn-default btn-xs" href="{{baseDir}}/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="campaigns-delete" action="/campaigns/delete">
+<form method="post" class="delete-form" id="campaigns-delete" action="{{baseDir}}/campaigns/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 </form>
 
 {{#each attachments}}
-    <form method="post" id="attachment-download-{{id}}" action="/campaigns/attachment/download">
+    <form method="post" id="attachment-download-{{id}}" action="{{baseDir}}/campaigns/attachment/download">
         <input type="hidden" name="_csrf" value="{{../csrfToken}}">
         <input type="hidden" name="id" value="{{../id}}" />
         <input type="hidden" name="attachment" value="{{id}}" />
     </form>
-    <form method="post" class="delete-form" id="attachment-delete-{{id}}" action="/campaigns/attachment/delete">
+    <form method="post" class="delete-form" id="attachment-delete-{{id}}" action="{{baseDir}}/campaigns/attachment/delete">
         <input type="hidden" name="_csrf" value="{{../csrfToken}}">
         <input type="hidden" name="id" value="{{../id}}" />
         <input type="hidden" name="attachment" value="{{id}}" />
     </form>
 {{/each}}
 
-<form class="form-horizontal" method="post" action="/campaigns/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/campaigns/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 
@@ -222,7 +222,7 @@
                         </table>
                     </div>
                     <div class="pull-right">
-                        <a class="btn btn-info btn-sm" href="/campaigns/attachment/{{id}}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {{#translate}}Add Attachment{{/translate}}</a>
+                        <a class="btn btn-info btn-sm" href="{{baseDir}}/campaigns/attachment/{{id}}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {{#translate}}Add Attachment{{/translate}}</a>
                     </div>
                 </fieldset>
             </div>

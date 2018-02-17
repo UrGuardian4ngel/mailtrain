@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/users/login">{{#translate}}Sign in{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/users/login">{{#translate}}Sign in{{/translate}}</a></li>
     <li class="active">{{#translate}}Password Reset{{/translate}}</li>
 </ol>
 
@@ -19,7 +19,7 @@
     <p>{{#translate}}Please provide the username or email address that you used when you signed up for your Mailtrain account.{{/translate}}</p>
     <p>{{#translate}}We will send you an email that will allow you to reset your password.{{/translate}}</p>
 
-    <form class="form-horizontal" role="login" method="post" action="/users/forgot">
+    <form class="form-horizontal" role="login" method="post" action="{{baseDir}}/users/forgot">
 
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
 

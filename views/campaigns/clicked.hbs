@@ -1,14 +1,14 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
     {{#if parent}}
-        <li><a href="/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
+        <li><a href="{{baseDir}}/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
     {{/if}}
-    <li><a href="/campaigns/view/{{id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/campaigns/view/{{id}}">{{name}}</a></li>
     <li class="active">{{#translate}}Link info{{/translate}}</li>
 </ol>
 
-<h2><span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> {{name}} <small>{{#translate}}Link info{{/translate}}</small> <a class="btn btn-default btn-xs" href="/campaigns/view/{{id}}?tab=links" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
+<h2><span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> {{name}} <small>{{#translate}}Link info{{/translate}}</small> <a class="btn btn-default btn-xs" href="{{baseDir}}/campaigns/view/{{id}}?tab=links" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
 
 <hr>
 
@@ -84,10 +84,10 @@
                     </tr>
                     <tr>
                         <th>
-                            <div class="data-stats-pie-chart" data-topic-url="/campaigns/clicked" data-column="country" data-topic-id="{{id}}/{{link.id}}"></div>
+                            <div class="data-stats-pie-chart" data-topic-url="{{baseDir}}/campaigns/clicked" data-column="country" data-topic-id="{{id}}/{{link.id}}"></div>
                         </th>
                         <th>
-                            <div class="data-stats-pie-chart" data-topic-url="/campaigns/clicked" data-column="device_type" data-topic-id="{{id}}/{{link.id}}"></div>
+                            <div class="data-stats-pie-chart" data-topic-url="{{baseDir}}/campaigns/clicked" data-column="device_type" data-topic-id="{{id}}/{{link.id}}"></div>
                         </th>
                     </tr>
                 </thead>
@@ -95,7 +95,7 @@
             </div>
             {{/unless}}
             <div class="table-responsive">
-                <table data-topic-url="/campaigns/clicked" data-topic-id="{{id}}/{{link.id}}" data-sort-column="1" data-sort-order="asc" class="table table-bordered table-hover data-table-ajax display nowrap" width="100%" data-row-sort="0,1,1,1,1,1,0">
+                <table data-topic-url="{{baseDir}}/campaigns/clicked" data-topic-id="{{id}}/{{link.id}}" data-sort-column="1" data-sort-order="asc" class="table table-bordered table-hover data-table-ajax display nowrap" width="100%" data-row-sort="0,1,1,1,1,1,0">
                     <thead>
                         <tr>
                             <th class="col-md-1">

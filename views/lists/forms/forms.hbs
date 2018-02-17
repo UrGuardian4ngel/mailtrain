@@ -1,12 +1,12 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">{{#translate}}Custom Forms{{/translate}}</li>
 </ol>
 
 <div class="pull-right">
-    <a class="btn btn-primary" href="/forms/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Custom Form{{/translate}}</a>
+    <a class="btn btn-primary" href="{{baseDir}}/forms/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Custom Form{{/translate}}</a>
 </div>
 
 <h2>{{list.name}} <small>{{#translate}}Custom Forms{{/translate}}</small></h2>
@@ -47,7 +47,7 @@
                         {{description}}
                     </td>
                     <td class="text-center">
-                        <a href="/forms/{{../list.id}}/edit/{{id}}">
+                        <a href="{{baseDir}}/forms/{{../list.id}}/edit/{{id}}">
                             {{#translate}}Edit{{/translate}}
                         </a>
                     </td>
@@ -65,7 +65,7 @@
 </div>
 
 
-<form class="form-inline" method="post" action="/lists/edit?next=%2Fforms%2F{{list.id}}">
+<form class="form-inline" method="post" action="{{baseDir}}/lists/edit?next=%2Fforms%2F{{list.id}}">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{list.id}}" />
     <input type="hidden" name="customFormChangeOnly" value="1" />

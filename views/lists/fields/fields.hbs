@@ -1,12 +1,12 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">{{#translate}}Custom Fields{{/translate}}</li>
 </ol>
 
 <div class="pull-right">
-    <a class="btn btn-primary" href="/fields/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Custom Field{{/translate}}</a>
+    <a class="btn btn-primary" href="{{baseDir}}/fields/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Custom Field{{/translate}}</a>
 </div>
 
 <h2>{{list.name}} <small>{{#translate}}Custom Fields{{/translate}}</small></h2>
@@ -55,7 +55,7 @@
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                        <a href="/fields/{{../list.id}}/edit/{{id}}">
+                        <a href="{{baseDir}}/fields/{{../list.id}}/edit/{{id}}">
                             {{#translate}}Edit{{/translate}}
                         </a>
                     </td>
@@ -77,7 +77,7 @@
                             </td>
                             <td>
                                 <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                <a href="/fields/{{../../list.id}}/edit/{{id}}">{{#translate}}Edit{{/translate}}</a>
+                                <a href="{{baseDir}}/fields/{{../../list.id}}/edit/{{id}}">{{#translate}}Edit{{/translate}}</a>
                             </td>
                         </tr>
                     {{/each}}

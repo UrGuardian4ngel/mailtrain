@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/triggers/">{{#translate}}Automation Triggers{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/triggers/">{{#translate}}Automation Triggers{{/translate}}</a></li>
     <li class="active">{{#translate}}Create Trigger{{/translate}}</li>
 </ol>
 
@@ -8,7 +8,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/triggers/create-select">
+<form class="form-horizontal" method="post" action="{{baseDir}}/triggers/create-select">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
     <div class="form-group">

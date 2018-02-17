@@ -44,6 +44,7 @@ const reports = require('./routes/reports');
 const reportsTemplates = require('./routes/report-templates');
 
 const app = express();
+const appRouter = express.Router();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -108,6 +109,8 @@ hbs.registerHelper('flash_messages', function () { // eslint-disable-line prefer
     );
 });
 
+hbs.registerHelper('baseDir', () => config.www.baseDir);
+
 handlebarsHelpers.registerHelpers(hbs.handlebars);
 
 
@@ -126,7 +129,7 @@ app.use(logger(config.www.log, {
 }));
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+appRouter.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     store: config.redis.enabled ? new RedisStore(config.redis) : false,
@@ -167,7 +170,7 @@ app.use((req, res, next) => {
 
     let menu = [{
         title: _('Home'),
-        url: '/',
+        url: config.www.baseDir + '/',
         selected: true
     }];
 
@@ -200,37 +203,39 @@ app.use((req, res, next) => {
     });
 });
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/lists', lists);
-app.use('/templates', templates);
-app.use('/campaigns', campaigns);
-app.use('/settings', settings);
-app.use('/blacklist', blacklist);
-app.use('/links', links);
-app.use('/fields', fields);
-app.use('/forms', forms);
-app.use('/segments', segments);
-app.use('/triggers', triggers);
-app.use('/webhooks', webhooks);
-app.use('/subscription', subscription);
-app.use('/archive', archive);
-app.use('/api', api);
-app.use('/editorapi', editorapi);
-app.use('/grapejs', grapejs);
-app.use('/mosaico', mosaico);
+appRouter.use('/', routes);
+appRouter.use('/users', users);
+appRouter.use('/lists', lists);
+appRouter.use('/templates', templates);
+appRouter.use('/campaigns', campaigns);
+appRouter.use('/settings', settings);
+appRouter.use('/blacklist', blacklist);
+appRouter.use('/links', links);
+appRouter.use('/fields', fields);
+appRouter.use('/forms', forms);
+appRouter.use('/segments', segments);
+appRouter.use('/triggers', triggers);
+appRouter.use('/webhooks', webhooks);
+appRouter.use('/subscription', subscription);
+appRouter.use('/archive', archive);
+appRouter.use('/api', api);
+appRouter.use('/editorapi', editorapi);
+appRouter.use('/grapejs', grapejs);
+appRouter.use('/mosaico', mosaico);
 
 if (config.reports && config.reports.enabled === true) {
-    app.use('/reports', reports);
-    app.use('/report-templates', reportsTemplates);
+    appRouter.use('/reports', reports);
+    appRouter.use('/report-templates', reportsTemplates);
 }
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+appRouter.use((req, res, next) => {
     let err = new Error(_('Not Found'));
     err.status = 404;
     next(err);
 });
+
+app.use(config.www.baseDir, appRouter);
 
 // error handlers
 

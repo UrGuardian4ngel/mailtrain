@@ -1,11 +1,11 @@
 {{#if hasPubkey}}
-    <form method="post" id="download-pubkey" action="/subscription/publickey" style="display: none;">
+    <form method="post" id="download-pubkey" action="{{baseDir}}/subscription/publickey" style="display: none;">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <input type="hidden" name="cid" value="{{cid}}">
     </form>
 {{/if}}
 
-<form id="main-form" method="post" action="/subscription/{{lcid}}/manage">
+<form id="main-form" method="post" action="{{baseDir}}/subscription/{{lcid}}/manage">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="cid" value="{{cid}}">
     <input type="hidden" class="tz-detect" name="tz" id="tz" value="{{tz}}">
@@ -15,5 +15,5 @@
     <button type="submit" style="position: absolute; top: -9999px; left: -9999px;">{{#translate}}Update Profile{{/translate}}</button>
 </form>
 
-<script src="/moment/moment.min.js"></script>
-<script src="/moment/moment-timezone-with-data.min.js"></script>
+<script src="{{baseDir}}/moment/moment.min.js"></script>
+<script src="{{baseDir}}/moment/moment-timezone-with-data.min.js"></script>

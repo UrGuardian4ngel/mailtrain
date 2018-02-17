@@ -103,7 +103,7 @@ router.get('/confirm/subscribe/:cid', (req, res, next) => {
                         return next(err);
                     }
 
-                    res.redirect('/subscription/' + list.cid + '/subscribed-notice');
+                    res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/subscribed-notice');
                 });
             });
         });
@@ -134,7 +134,7 @@ router.get('/confirm/change-address/:cid', (req, res, next) => {
                     }
 
                     req.flash('info', _('Email address changed'));
-                    res.redirect('/subscription/' + list.cid + '/manage/' + subscription.cid);
+                    res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/manage/' + subscription.cid);
                 });
             });
         });
@@ -162,7 +162,7 @@ router.get('/confirm/unsubscribe/:cid', (req, res, next) => {
                         return next(err);
                     }
 
-                    res.redirect('/subscription/' + list.cid + '/unsubscribed-notice');
+                    res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/unsubscribed-notice');
                 });
             });
         });
@@ -355,7 +355,7 @@ router.post('/:cid/subscribe', passport.parseForm, corsOrCsrfProtection, (req, r
             return sendJsonError(_('Email address not set'), 400);
         }
         req.flash('danger', _('Email address not set'));
-        return res.redirect('/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
+        return res.redirect(config.www.baseDir + '/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
     }
 
     tools.validateEmail(email, false, err => {
@@ -364,7 +364,7 @@ router.post('/:cid/subscribe', passport.parseForm, corsOrCsrfProtection, (req, r
                 return sendJsonError(err.message, 400);
             }
             req.flash('danger', err.message);
-            return res.redirect('/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
         }
 
         // Check if the subscriber seems legit. This is a really simple check, the only requirement is that
@@ -409,7 +409,7 @@ router.post('/:cid/subscribe', passport.parseForm, corsOrCsrfProtection, (req, r
                         if (err) {
                             return req.xhr ? sendJsonError(err) : next(err);
                         }
-                        res.redirect('/subscription/' + req.params.cid + '/confirm-subscription-notice');
+                        res.redirect(config.www.baseDir + '/subscription/' + req.params.cid + '/confirm-subscription-notice');
                     });
                 } else {
                     const data = {
@@ -423,7 +423,7 @@ router.post('/:cid/subscribe', passport.parseForm, corsOrCsrfProtection, (req, r
                                 return sendJsonError(err);
                             }
                             req.flash('danger', err.message || err);
-                            return res.redirect('/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
+                            return res.redirect(config.www.baseDir + '/subscription/' + encodeURIComponent(req.params.cid) + '?' + tools.queryParams(req.body));
                         }
 
                         function sendWebResponse() {
@@ -432,7 +432,7 @@ router.post('/:cid/subscribe', passport.parseForm, corsOrCsrfProtection, (req, r
                                     msg: _('Please Confirm Subscription')
                                 });
                             }
-                            res.redirect('/subscription/' + req.params.cid + '/confirm-subscription-notice');
+                            res.redirect(config.www.baseDir + '/subscription/' + req.params.cid + '/confirm-subscription-notice');
                         }
 
                         if (!testsPass) {
@@ -554,7 +554,7 @@ router.post('/:lcid/manage', passport.parseForm, passport.csrfProtection, (req, 
                 if (err) {
                     return next(err);
                 }
-                res.redirect('/subscription/' + req.params.lcid + '/updated-notice');
+                res.redirect(config.www.baseDir + '/subscription/' + req.params.lcid + '/updated-notice');
             });
         });
     });
@@ -637,7 +637,7 @@ router.post('/:lcid/manage-address', passport.parseForm, passport.csrfProtection
 
         if (emailOld === emailNew) {
             req.flash('info', _('Nothing seems to be changed'));
-            res.redirect('/subscription/' + req.params.lcid + '/manage/' + req.body.cid);
+            res.redirect(config.www.baseDir + '/subscription/' + req.params.lcid + '/manage/' + req.body.cid);
 
         } else {
             subscriptions.updateAddressCheck(list, req.body.cid, emailNew, req.ip, (err, subscription, newEmailAvailable) => {
@@ -651,7 +651,7 @@ router.post('/:lcid/manage-address', passport.parseForm, passport.csrfProtection
                     }
 
                     req.flash('info', _('An email with further instructions has been sent to the provided address'));
-                    res.redirect('/subscription/' + req.params.lcid + '/manage/' + req.body.cid);
+                    res.redirect(config.www.baseDir + '/subscription/' + req.params.lcid + '/manage/' + req.body.cid);
                 }
 
                 if (newEmailAvailable) {
@@ -798,7 +798,7 @@ function handleUnsubscribe(list, subscription, autoUnsubscribe, campaignId, ip, 
                     return next(err);
                 }
 
-                res.redirect('/subscription/' + list.cid + '/unsubscribed-notice');
+                res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/unsubscribed-notice');
             });
         });
 
@@ -819,12 +819,12 @@ function handleUnsubscribe(list, subscription, autoUnsubscribe, campaignId, ip, 
                     return next(err);
                 }
 
-                res.redirect('/subscription/' + list.cid + '/confirm-unsubscription-notice');
+                res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/confirm-unsubscription-notice');
             });
         });
 
     } else { // UnsubscriptionMode.MANUAL
-        res.redirect('/subscription/' + list.cid + '/manual-unsubscribe-notice');
+        res.redirect(config.www.baseDir + '/subscription/' + list.cid + '/manual-unsubscribe-notice');
     }
 }
 

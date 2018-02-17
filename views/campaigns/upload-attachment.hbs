@@ -1,19 +1,19 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
     {{#if parent}}
-        <li><a href="/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
+        <li><a href="{{baseDir}}/campaigns/view/{{parent.id}}">{{parent.name}}</a></li>
     {{/if}}
-    <li><a href="/campaigns/view/{{id}}">{{name}}</a></li>
-    <li><a href="/campaigns/edit/{{id}}?tab=attachments">{{#translate}}Edit Campaign{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns/view/{{id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/campaigns/edit/{{id}}?tab=attachments">{{#translate}}Edit Campaign{{/translate}}</a></li>
     <li class="active">{{#translate}}Add Attachment{{/translate}}</li>
 </ol>
 
-<h2>{{#translate}}Edit Campaign{{/translate}} <a class="btn btn-default btn-xs" href="/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
+<h2>{{#translate}}Edit Campaign{{/translate}} <a class="btn btn-default btn-xs" href="{{baseDir}}/campaigns/view/{{id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}View campaign{{/translate}}</a></h2>
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/campaigns/attachment" enctype="multipart/form-data">
+<form class="form-horizontal" method="post" action="{{baseDir}}/campaigns/attachment" enctype="multipart/form-data">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
     <div class="form-group">

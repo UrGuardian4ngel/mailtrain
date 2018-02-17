@@ -1,5 +1,6 @@
 'use strict';
 
+let config = require('config');
 let express = require('express');
 let router = new express.Router();
 let passport = require('../lib/passport');
@@ -11,7 +12,7 @@ let _ = require('../lib/translate')._;
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('lists');
     next();
@@ -21,18 +22,18 @@ router.get('/:list', (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.list(list.id, (err, rows) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
             }
 
             let index = 0;
@@ -52,12 +53,12 @@ router.get('/:list/create', passport.csrfProtection, (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         let segment = tools.convertKeys(req.query, {
@@ -84,10 +85,10 @@ router.post('/:list/create', passport.parseForm, passport.csrfProtection, (req, 
     segments.create(req.params.list, req.body, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create segment'));
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/create?' + tools.queryParams(req.body));
         }
         req.flash('success', _('Segment created'));
-        res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + id);
+        res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + id);
     });
 });
 
@@ -95,23 +96,23 @@ router.get('/:list/view/:id', (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.id, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             if (!segment) {
                 req.flash('danger', _('Selected segment ID not found'));
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             segment.list = list;
@@ -144,23 +145,23 @@ router.get('/:list/edit/:segment', passport.csrfProtection, (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.segment, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             if (!segment) {
                 req.flash('danger', 'Selected segment not found');
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             segment.csrfToken = req.csrfToken();
@@ -191,9 +192,9 @@ router.post('/:list/edit', passport.parseForm, passport.csrfProtection, (req, re
         }
 
         if (req.body.id) {
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.body.id));
         } else {
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
         }
     });
 });
@@ -208,7 +209,7 @@ router.post('/:list/delete', passport.parseForm, passport.csrfProtection, (req, 
             req.flash('info', _('Could not delete specified segment'));
         }
 
-        return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+        return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
     });
 });
 
@@ -216,23 +217,23 @@ router.get('/:list/rules/:segment/create', passport.csrfProtection, (req, res) =
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.segment, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             if (!segment) {
                 req.flash('danger', 'Selected segment not found');
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             segment.csrfToken = req.csrfToken();
@@ -248,32 +249,32 @@ router.post('/:list/rules/:segment/next', passport.parseForm, passport.csrfProte
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.segment, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             if (!segment) {
                 req.flash('danger', _('Selected segment not found'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             let column = segment.columns.filter(column => column.column === req.body.column).pop();
             if (!column) {
                 req.flash('danger', _('Invalid rule type'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/create?' + tools.queryParams(req.body));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/create?' + tools.queryParams(req.body));
             }
 
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/configure?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/configure?' + tools.queryParams(req.body));
         });
     });
 });
@@ -282,29 +283,29 @@ router.get('/:list/rules/:segment/configure', passport.csrfProtection, (req, res
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.segment, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             if (!segment) {
                 req.flash('danger', _('Selected segment not found'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             let column = segment.columns.filter(column => column.column === req.query.column).pop();
             if (!column) {
                 req.flash('danger', _('Invalid rule type'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/create?' + tools.queryParams(req.body));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/rules/' + segment.id + '/create?' + tools.queryParams(req.body));
             }
 
             let data = tools.convertKeys(req.query, {
@@ -329,21 +330,21 @@ router.post('/:list/rules/:segment/create', passport.parseForm, passport.csrfPro
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.createRule(req.params.segment, req.body, (err, id) => {
             if (err || !id) {
                 req.flash('danger', err && err.message || err || _('Could not create rule'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/rules/' + encodeURIComponent(req.params.segment) + '/configure?' + tools.queryParams(req.body));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/rules/' + encodeURIComponent(req.params.segment) + '/configure?' + tools.queryParams(req.body));
             }
             req.flash('success', _('Rule created'));
-            res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
+            res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
         });
     });
 });
@@ -352,40 +353,40 @@ router.get('/:list/rules/:segment/edit/:rule', passport.csrfProtection, (req, re
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         segments.get(req.params.segment, (err, segment) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             if (!segment) {
                 req.flash('danger', _('Selected segment not found'));
-                return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
             }
 
             segments.getRule(req.params.rule, (err, rule) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                    return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
                 }
 
                 if (!segment) {
                     req.flash('danger', _('Selected segment not found'));
-                    return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+                    return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
                 }
 
                 let column = segment.columns.filter(column => column.column === rule.column).pop();
                 if (!column) {
                     req.flash('danger', _('Invalid rule type'));
-                    return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + segment.id);
+                    return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + segment.id);
                 }
 
                 rule.csrfToken = req.csrfToken();
@@ -413,9 +414,9 @@ router.post('/:list/rules/:segment/edit', passport.parseForm, passport.csrfProte
         }
 
         if (req.params.segment) {
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
         } else {
-            return res.redirect('/segments/' + encodeURIComponent(req.params.list));
+            return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list));
         }
     });
 });
@@ -430,7 +431,7 @@ router.post('/:list/rules/:segment/delete', passport.parseForm, passport.csrfPro
             req.flash('info', _('Could not delete specified rule'));
         }
 
-        return res.redirect('/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
+        return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.list) + '/view/' + encodeURIComponent(req.params.segment));
     });
 });
 

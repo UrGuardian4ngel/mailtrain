@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">{{#translate}}Import subscribers{{/translate}}</li>
 </ol>
 
@@ -9,7 +9,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/lists/subscription/import" enctype="multipart/form-data">
+<form class="form-horizontal" method="post" action="{{baseDir}}/lists/subscription/import" enctype="multipart/form-data">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="list" value="{{list.id}}">
 

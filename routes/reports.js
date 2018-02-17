@@ -1,5 +1,6 @@
 'use strict';
 
+const config = require('config');
 const express = require('express');
 const passport = require('../lib/passport');
 const router = new express.Router();
@@ -20,7 +21,7 @@ const hbs = require('hbs');
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('reports');
     next();
@@ -84,7 +85,7 @@ router.get('/create', passport.csrfProtection, (req, res) => {
     reportTemplates.quicklist((err, items) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/reports');
+            return res.redirect(config.www.baseDir + '/reports');
         }
 
         const reportTemplateId = Number(reqData.reportTemplate);
@@ -105,7 +106,7 @@ router.get('/create', passport.csrfProtection, (req, res) => {
             addUserFields(reportTemplateId, reqData, null, (err, data) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/reports');
+                    return res.redirect(config.www.baseDir + '/reports');
                 }
 
                 res.render('reports/create', data);
@@ -122,18 +123,18 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
     addParamsObject(reportTemplateId, reqData, (err, data) => {
         if (err) {
             req.flash('danger', err && err.message || err || _('Could not create report'));
-            return res.redirect('/reports/create?' + tools.queryParams(data));
+            return res.redirect(config.www.baseDir + '/reports/create?' + tools.queryParams(data));
         }
 
         reports.createOrUpdate(true, data, (err, id) => {
             if (err || !id) {
                 req.flash('danger', err && err.message || err || _('Could not create report'));
-                return res.redirect('/reports/create?' + tools.queryParams(data));
+                return res.redirect(config.www.baseDir + '/reports/create?' + tools.queryParams(data));
             }
 
             reportProcessor.start(id, () => {
                 req.flash('success', util.format(_('Report “%s” created'), data.name));
-                res.redirect('/reports');
+                res.redirect(config.www.baseDir + '/reports');
             });
         });
     });
@@ -144,7 +145,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res) => {
     reports.get(req.params.id, (err, report) => {
         if (err || !report) {
             req.flash('danger', err && err.message || err || _('Could not find report with specified ID'));
-            return res.redirect('/reports');
+            return res.redirect(config.www.baseDir + '/reports');
         }
 
         report.csrfToken = req.csrfToken();
@@ -154,7 +155,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res) => {
         reportTemplates.quicklist((err, items) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             const reportTemplateId = report.reportTemplate;
@@ -170,7 +171,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res) => {
             addUserFields(reportTemplateId, reqData, report, (err, data) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/reports');
+                    return res.redirect(config.www.baseDir + '/reports');
                 }
 
                 res.render('reports/edit', data);
@@ -186,20 +187,20 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
     addParamsObject(reportTemplateId, reqData, (err, data) => {
         if (err) {
             req.flash('danger', err && err.message || err || _('Could not update report'));
-            return res.redirect('/reports/create?' + tools.queryParams(data));
+            return res.redirect(config.www.baseDir + '/reports/create?' + tools.queryParams(data));
         }
 
         reports.createOrUpdate(false, data, (err, updated) => {
             if (err) {
                 req.flash('danger', err && err.message || err || _('Could not update report'));
-                return res.redirect('/reports/edit/' + data.id + '?' + tools.queryParams(data));
+                return res.redirect(config.www.baseDir + '/reports/edit/' + data.id + '?' + tools.queryParams(data));
             } else if (updated) {
                 req.flash('success', _('Report updated'));
             } else {
                 req.flash('info', _('Report not updated'));
             }
 
-            return res.redirect('/reports');
+            return res.redirect(config.www.baseDir + '/reports');
         });
     });
 });
@@ -214,7 +215,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified report'));
         }
 
-        return res.redirect('/reports');
+        return res.redirect(config.www.baseDir + '/reports');
     });
 });
 
@@ -222,13 +223,13 @@ router.get('/view/:id', (req, res) => {
     reports.get(req.params.id, (err, report) => {
         if (err || !report) {
             req.flash('danger', err && err.message || err || _('Could not find report with specified ID'));
-            return res.redirect('/reports');
+            return res.redirect(config.www.baseDir + '/reports');
         }
 
         reportTemplates.get(report.reportTemplate, (err, reportTemplate) => {
             if (err) {
                 req.flash('danger', err && err.message || err || _('Could not find report template'));
-                return res.redirect('/reports');
+                return res.redirect(config.www.baseDir + '/reports');
             }
 
             if (report.state == reports.ReportState.FINISHED) {
@@ -237,7 +238,7 @@ router.get('/view/:id', (req, res) => {
                     fs.readFile(fileHelpers.getReportContentFile(report), (err, reportContent) => {
                         if (err) {
                             req.flash('danger', err && err.message || err || _('Could not find report with specified ID'));
-                            return res.redirect('/reports');
+                            return res.redirect(config.www.baseDir + '/reports');
                         }
 
                         const data = {
@@ -258,12 +259,12 @@ router.get('/view/:id', (req, res) => {
 
                 } else {
                     req.flash('danger', _('Unknown type of template'));
-                    res.redirect('/reports');
+                    res.redirect(config.www.baseDir + '/reports');
                 }
 
             } else {
                 req.flash('danger', err && err.message || err || _('Could not find report with specified ID'));
-                return res.redirect('/reports');
+                return res.redirect(config.www.baseDir + '/reports');
             }
         });
     });
@@ -273,7 +274,7 @@ router.get('/output/:id', (req, res) => {
     reports.get(req.params.id, (err, report) => {
         if (err || !report) {
             req.flash('danger', err && err.message || err || _('Could not find report with specified ID'));
-            return res.redirect('/reports');
+            return res.redirect(config.www.baseDir + '/reports');
         }
 
         fs.readFile(fileHelpers.getReportOutputFile(report), (err, output) => {
@@ -305,27 +306,27 @@ function getRowActions(row) {
 
     if (row.state == reports.ReportState.PROCESSING || row.state == reports.ReportState.SCHEDULED) {
         view = '<span class="row-action glyphicon glyphicon-hourglass" aria-hidden="true" title="Processing"></span>';
-        startStop = '<a class="row-action ajax-action" href="" data-topic-url="/reports/stop" ' + topic + ' title="Stop"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>';
+        startStop = '<a class="row-action ajax-action" href="" data-topic-url="{{baseDir}}/reports/stop" ' + topic + ' title="Stop"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>';
         requestRefresh = true;
 
     } else if (row.state == reports.ReportState.FINISHED) {
         let icon = 'eye-open';
         if (row.mimeType == 'text/csv') icon = 'download-alt';
 
-        view = '<a class="row-action" href="/reports/view/' + row.id + '" title="View report"><span class="glyphicon glyphicon-' + icon + '" aria-hidden="true"></span></a>';
-        startStop = '<a class="row-action ajax-action" href="" data-topic-url="/reports/start" ' + topic + ' title="Refresh report"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></a>';
+        view = '<a class="row-action" href="' + config.www.baseDir + '/reports/view/' + row.id + '" title="View report"><span class="glyphicon glyphicon-' + icon + '" aria-hidden="true"></span></a>';
+        startStop = '<a class="row-action ajax-action" href="" data-topic-url="{{baseDir}}/reports/start" ' + topic + ' title="Refresh report"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></a>';
 
     } else if (row.state == reports.ReportState.FAILED) {
         view = '<span class="row-action glyphicon glyphicon-thumbs-down" aria-hidden="true" title="Report generation failed"></span>';
-        startStop = '<a class="row-action ajax-action" href="" data-topic-url="/reports/start" ' + topic + ' title="Refresh report"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></a>';
+        startStop = '<a class="row-action ajax-action" href="" data-topic-url="{{baseDir}}/reports/start" ' + topic + ' title="Refresh report"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></a>';
     }
 
     let actions = view;
-    actions += '<a class="row-action" href="/reports/output/' + row.id + '" title="View console output"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span></a>';
+    actions += '<a class="row-action" href="' + config.www.baseDir + '/reports/output/' + row.id + '" title="View console output"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span></a>';
     actions += startStop;
-    actions += '<a class="row-action" href="/reports/edit/' + row.id + '"><span class="glyphicon glyphicon-wrench" aria-hidden="true" title="Edit"></span></a>';
+    actions += '<a class="row-action" href="' + config.www.baseDir + '/reports/edit/' + row.id + '"><span class="glyphicon glyphicon-wrench" aria-hidden="true" title="Edit"></span></a>';
 
-    return '<span id="row-actions-' + row.id + '"' + (requestRefresh ? ' class="row-actions ajax-refresh" data-interval="5" data-topic-url="/reports/row" ' + topic : ' class="row-actions"') + '>' +
+    return '<span id="row-actions-' + row.id + '"' + (requestRefresh ? ' class="row-actions ajax-refresh" data-interval="5" data-topic-url="{{baseDir}}/reports/row" ' + topic : ' class="row-actions"') + '>' +
         actions +
         '</span>';
 }

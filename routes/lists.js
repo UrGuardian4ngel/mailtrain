@@ -48,7 +48,7 @@ let moment = require('moment-timezone');
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('lists');
     next();
@@ -80,10 +80,10 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
     lists.create(req.body, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create list'));
-            return res.redirect('/lists/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/lists/create?' + tools.queryParams(req.body));
         }
         req.flash('success', _('List created'));
-        res.redirect('/lists/view/' + id);
+        res.redirect(config.www.baseDir + '/lists/view/' + id);
     });
 });
 
@@ -91,13 +91,13 @@ router.get('/edit/:id', passport.csrfProtection, (req, res) => {
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         forms.list(list.id, (err, customForms) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             }
 
             list.customForms = customForms.map(row => {
@@ -127,9 +127,9 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
         if (req.query.next) {
             return res.redirect(req.query.next);
         } else if (req.body.id) {
-            return res.redirect('/lists/edit/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/lists/edit/' + encodeURIComponent(req.body.id));
         } else {
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
     });
 });
@@ -144,7 +144,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified list'));
         }
 
-        return res.redirect('/lists');
+        return res.redirect(config.www.baseDir + '/lists');
     });
 });
 
@@ -163,11 +163,11 @@ router.post('/ajax', (req, res) => {
             recordsFiltered: filteredTotal,
             data: data.map((row, i) => [
                 (Number(req.body.start) || 0) + 1 + i,
-                '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <a href="/lists/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
+                '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <a href="' + config.www.baseDir + '/lists/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
                 '<code>' + row.cid + '</code>',
                 row.subscribers,
                 htmlescape(striptags(row.description) || ''),
-                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/lists/edit/' + row.id + '">' + _('Edit') + '</a>' ]
+                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/lists/edit/' + row.id + '">' + _('Edit') + '</a>' ]
             )
         });
     });
@@ -254,7 +254,7 @@ router.post('/ajax/:id', (req, res) => {
                         } else {
                             return htmlescape(cRow.value || '');
                         }
-                    })).concat(statuses[row.status]).concat(row.created && row.created.toISOString ? '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>' : 'N/A').concat('<a href="/lists/subscription/' + list.id + '/edit/' + row.cid + '">' + _('Edit') + '</a>'))
+                    })).concat(statuses[row.status]).concat(row.created && row.created.toISOString ? '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>' : 'N/A').concat('<a href="' + config.www.baseDir + '/lists/subscription/' + list.id + '/edit/' + row.cid + '">' + _('Edit') + '</a>'))
                 });
             });
         });
@@ -263,13 +263,13 @@ router.post('/ajax/:id', (req, res) => {
 
 router.get('/view/:id', passport.csrfProtection, (req, res) => {
     if (Number(req.query.segment) === -1) {
-        return res.redirect('/segments/' + encodeURIComponent(req.params.id) + '/create');
+        return res.redirect(config.www.baseDir + '/segments/' + encodeURIComponent(req.params.id) + '/create');
     }
 
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.listImports(list.id, (err, imports) => {
@@ -334,7 +334,7 @@ router.get('/subscription/:id/add', passport.csrfProtection, (req, res) => {
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         fields.list(list.id, (err, fieldList) => {
@@ -373,13 +373,13 @@ router.get('/subscription/:id/edit/:cid', passport.csrfProtection, (req, res) =>
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.get(list.id, req.params.cid, (err, subscription) => {
             if (err || !subscription) {
                 req.flash('danger', err && err.message || err || _('Could not find subscriber with specified ID'));
-                return res.redirect('/lists/view/' + req.params.id);
+                return res.redirect(config.www.baseDir + '/lists/view/' + req.params.id);
             }
 
             fields.list(list.id, (err, fieldList) => {
@@ -425,7 +425,7 @@ router.post('/subscription/add', passport.parseForm, passport.csrfProtection, (r
     subscriptions.insert(req.body.list, false, req.body, (err, response) => {
         if (err) {
             req.flash('danger', err && err.message || err || _('Could not add subscription'));
-            return res.redirect('/lists/subscription/' + encodeURIComponent(req.body.list) + '/add?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/lists/subscription/' + encodeURIComponent(req.body.list) + '/add?' + tools.queryParams(req.body));
         }
 
         if (response.entryId) {
@@ -434,7 +434,7 @@ router.post('/subscription/add', passport.parseForm, passport.csrfProtection, (r
             req.flash('warning', util.format(_('%s was not added to your list'), req.body.email));
         }
 
-        res.redirect('/lists/subscription/' + encodeURIComponent(req.body.list) + '/add');
+        res.redirect(config.www.baseDir + '/lists/subscription/' + encodeURIComponent(req.body.list) + '/add');
     });
 });
 
@@ -442,22 +442,22 @@ router.post('/subscription/unsubscribe', passport.parseForm, passport.csrfProtec
     lists.get(req.body.list, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.get(list.id, req.body.cid, (err, subscription) => {
             if (err || !subscription) {
                 req.flash('danger', err && err.message || err || _('Could not find subscriber with specified ID'));
-                return res.redirect('/lists/view/' + list.id);
+                return res.redirect(config.www.baseDir + '/lists/view/' + list.id);
             }
 
             subscriptions.changeStatus(list.id, subscription.id, false, subscriptions.Status.UNSUBSCRIBED, (err, found) => {
                 if (err) {
                     req.flash('danger', err && err.message || err || _('Could not unsubscribe user'));
-                    return res.redirect('/lists/subscription/' + list.id + '/edit/' + subscription.cid);
+                    return res.redirect(config.www.baseDir + '/lists/subscription/' + list.id + '/edit/' + subscription.cid);
                 }
                 req.flash('success', util.format(_('%s was successfully unsubscribed from your list'), subscription.email));
-                res.redirect('/lists/view/' + list.id);
+                res.redirect(config.www.baseDir + '/lists/view/' + list.id);
             });
         });
     });
@@ -467,17 +467,17 @@ router.post('/subscription/delete', passport.parseForm, passport.csrfProtection,
     lists.get(req.body.list, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.delete(list.id, req.body.cid, (err, email) => {
             if (err || !email) {
                 req.flash('danger', err && err.message || err || _('Could not find subscriber with specified ID'));
-                return res.redirect('/lists/view/' + list.id);
+                return res.redirect(config.www.baseDir + '/lists/view/' + list.id);
             }
 
             req.flash('success', util.format(_('%s was successfully removed from your list'), email));
-            res.redirect('/lists/view/' + list.id);
+            res.redirect(config.www.baseDir + '/lists/view/' + list.id);
         });
     });
 });
@@ -489,7 +489,7 @@ router.post('/subscription/edit', passport.parseForm, passport.csrfProtection, (
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 req.flash('danger', util.format(_('Another subscriber with email address %s already exists'), req.body.email));
-                return res.redirect('/lists/subscription/' + encodeURIComponent(req.body.list) + '/edit/' + req.body.cid);
+                return res.redirect(config.www.baseDir + '/lists/subscription/' + encodeURIComponent(req.body.list) + '/edit/' + req.body.cid);
             } else {
                 req.flash('danger', err.message || err);
             }
@@ -501,9 +501,9 @@ router.post('/subscription/edit', passport.parseForm, passport.csrfProtection, (
         }
 
         if (req.body.list) {
-            return res.redirect('/lists/view/' + encodeURIComponent(req.body.list));
+            return res.redirect(config.www.baseDir + '/lists/view/' + encodeURIComponent(req.body.list));
         } else {
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
     });
 });
@@ -512,7 +512,7 @@ router.get('/subscription/:id/import', passport.csrfProtection, (req, res) => {
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         let data = tools.convertKeys(req.query, {
@@ -534,13 +534,13 @@ router.get('/subscription/:id/import/:importId', passport.csrfProtection, (req, 
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.getImport(req.params.id, req.params.importId, (err, data) => {
             if (err || !data) {
                 req.flash('danger', err && err.message || err || _('Could not find import data with specified ID'));
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             }
 
             fields.list(list.id, (err, fieldList) => {
@@ -563,7 +563,7 @@ router.post('/subscription/import', uploads.single('listimport'), passport.parse
     lists.get(req.body.list, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         let delimiter = (req.body.delimiter || '').trim().charAt(0) || ',';
@@ -571,7 +571,7 @@ router.post('/subscription/import', uploads.single('listimport'), passport.parse
         getPreview(req.file.path, req.file.size, delimiter, (err, rows) => {
             if (err) {
                 req.flash('danger', err && err.message || err || _('Could not process CSV'));
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             } else {
 
                 let type = 0; // Use the existing subscription status or SUBSCRIBED
@@ -587,10 +587,10 @@ router.post('/subscription/import', uploads.single('listimport'), passport.parse
                 }, (err, importId) => {
                     if (err) {
                         req.flash('danger', err && err.message || err || _('Could not create importer'));
-                        return res.redirect('/lists');
+                        return res.redirect(config.www.baseDir + '/lists');
                     }
 
-                    return res.redirect('/lists/subscription/' + list.id + '/import/' + importId);
+                    return res.redirect(config.www.baseDir + '/lists/subscription/' + list.id + '/import/' + importId);
                 });
             }
         });
@@ -655,13 +655,13 @@ router.post('/subscription/import-confirm', passport.parseForm, passport.csrfPro
     lists.get(req.body.list, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.getImport(list.id, req.body.import, (err, data) => {
             if (err || !data) {
                 req.flash('danger', err && err.message || err || _('Could not find import data with specified ID'));
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             }
 
             fields.list(list.id, (err, fieldList) => {
@@ -697,11 +697,11 @@ router.post('/subscription/import-confirm', passport.parseForm, passport.csrfPro
                 }, (err, importer) => {
                     if (err || !importer) {
                         req.flash('danger', err && err.message || err || _('Could not find import data with specified ID'));
-                        return res.redirect('/lists');
+                        return res.redirect(config.www.baseDir + '/lists');
                     }
 
                     req.flash('success', _('Import started'));
-                    res.redirect('/lists/view/' + list.id + '?tab=imports');
+                    res.redirect(config.www.baseDir + '/lists/view/' + list.id + '?tab=imports');
                 });
             });
         });
@@ -712,7 +712,7 @@ router.post('/subscription/import-restart', passport.parseForm, passport.csrfPro
     lists.get(req.body.list, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.updateImport(list.id, req.body.import, {
@@ -725,11 +725,11 @@ router.post('/subscription/import-restart', passport.parseForm, passport.csrfPro
         }, (err, importer) => {
             if (err || !importer) {
                 req.flash('danger', err && err.message || err || _('Could not find import data with specified ID'));
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             }
 
             req.flash('success', _('Import restarted'));
-            res.redirect('/lists/view/' + list.id + '?tab=imports');
+            res.redirect(config.www.baseDir + '/lists/view/' + list.id + '?tab=imports');
         });
     });
 });
@@ -739,18 +739,18 @@ router.get('/subscription/:id/import/:importId/failed', (req, res) => {
     lists.get(req.params.id, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find list with specified ID'));
-            return res.redirect('/lists');
+            return res.redirect(config.www.baseDir + '/lists');
         }
 
         subscriptions.getImport(req.params.id, req.params.importId, (err, data) => {
             if (err || !data) {
                 req.flash('danger', err && err.message || err || _('Could not find import data with specified ID'));
-                return res.redirect('/lists');
+                return res.redirect(config.www.baseDir + '/lists');
             }
             subscriptions.getFailedImports(req.params.importId, (err, rows) => {
                 if (err) {
                     req.flash('danger', err && err.message || err);
-                    return res.redirect('/lists');
+                    return res.redirect(config.www.baseDir + '/lists');
                 }
 
                 data.rows = rows.map((row, i) => {
@@ -780,7 +780,7 @@ router.post('/quicklist/ajax', (req, res) => {
             recordsFiltered: filteredTotal,
             data: data.map((row, i) => ({
                 "0": (Number(req.body.start) || 0) + 1 + i,
-                "1": '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="/lists/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
+                "1": '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="' + config.www.baseDir + '/lists/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
                 "2": row.subscribers,
                 "DT_RowId": row.id
             }))

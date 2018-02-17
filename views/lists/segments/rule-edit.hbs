@@ -1,9 +1,9 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
-    <li><a href="/segments/{{list.id}}">{{#translate}}Segments{{/translate}}</a></li>
-    <li><a href="/segments/{{list.id}}/view/{{segment.id}}">{{name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/segments/{{list.id}}">{{#translate}}Segments{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/segments/{{list.id}}/view/{{segment.id}}">{{name}}</a></li>
     <li class="active">{{#translate}}Create Segment{{/translate}}</li>
 </ol>
 
@@ -11,12 +11,12 @@
 
 <hr>
 
-<form method="post" class="delete-form" id="rule-delete" action="/segments/{{list.id}}/rules/{{segment.id}}/delete">
+<form method="post" class="delete-form" id="rule-delete" action="{{baseDir}}/segments/{{list.id}}/rules/{{segment.id}}/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 </form>
 
-<form class="form-horizontal" method="post" action="/segments/{{list.id}}/rules/{{segment.id}}/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/segments/{{list.id}}/rules/{{segment.id}}/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}">
 

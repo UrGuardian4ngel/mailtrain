@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/campaigns">{{#translate}}Campaigns{{/translate}}</a></li>
     <li class="active">{{#translate}}Create Triggered Campaign{{/translate}}</li>
 </ol>
 
@@ -8,7 +8,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/campaigns/create">
+<form class="form-horizontal" method="post" action="{{baseDir}}/campaigns/create">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="type" value="triggered">
 

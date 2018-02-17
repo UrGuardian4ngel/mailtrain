@@ -1,35 +1,35 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">
         {{#translate}}Edit subscriber{{/translate}}
     </li>
 </ol>
 
-<h2>{{list.name}} <small>{{#translate}}Edit subscriber{{/translate}}</small> <a class="btn btn-default btn-xs" href="/lists/view/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to list{{/translate}}</a></h2>
+<h2>{{list.name}} <small>{{#translate}}Edit subscriber{{/translate}}</small> <a class="btn btn-default btn-xs" href="{{baseDir}}/lists/view/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to list{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="subscriber-unsubscribe" action="/lists/subscription/unsubscribe">
+<form method="post" class="delete-form" id="subscriber-unsubscribe" action="{{baseDir}}/lists/subscription/unsubscribe">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="list" value="{{list.id}}">
     <input type="hidden" name="cid" value="{{cid}}">
 </form>
 
-<form method="post" id="subscriber-blacklist" action="/blacklist/ajax/add">
+<form method="post" id="subscriber-blacklist" action="{{baseDir}}/blacklist/ajax/add">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="email" value="{{email}}">
     <input type="hidden" name="next" value="/lists/view/{{list.id}}">
 </form>
 
-<form method="post" class="delete-form" id="subscriber-delete" action="/lists/subscription/delete">
+<form method="post" class="delete-form" id="subscriber-delete" action="{{baseDir}}/lists/subscription/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="list" value="{{list.id}}">
     <input type="hidden" name="cid" value="{{cid}}">
 </form>
 
-<form class="form-horizontal" method="post" action="/lists/subscription/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/lists/subscription/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="list" value="{{list.id}}">
     <input type="hidden" name="cid" value="{{cid}}">

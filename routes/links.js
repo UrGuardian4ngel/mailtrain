@@ -7,6 +7,7 @@ let subscriptions = require('../lib/models/subscriptions');
 let tools = require('../lib/tools');
 let _ = require('../lib/translate')._;
 
+let config = require('config');
 let log = require('npmlog');
 let express = require('express');
 let router = new express.Router();
@@ -46,7 +47,7 @@ router.get('/:campaign/:list/:subscription/:link', (req, res) => {
     links.resolve(req.params.link, (err, linkId, url) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
         if (!linkId || !url) {
             log.error('Redirect', 'Unresolved URL: <%s>', req.url);
@@ -70,7 +71,7 @@ router.get('/:campaign/:list/:subscription/:link', (req, res) => {
         lists.getByCid(req.params.list, (err, list) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             if (!list) {
@@ -87,7 +88,7 @@ router.get('/:campaign/:list/:subscription/:link', (req, res) => {
                 subscriptions.getWithMergeTags(list.id, req.params.subscription, (err, subscription) => {
                     if (err) {
                         req.flash('danger', err.message || err);
-                        return res.redirect('/');
+                        return res.redirect(config.www.baseDir + '/');
                     }
 
                     if (!subscription) {

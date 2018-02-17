@@ -1,5 +1,6 @@
 'use strict';
 
+let config = require('config');
 let express = require('express');
 let router = new express.Router();
 let lists = require('../lib/models/lists');
@@ -11,7 +12,7 @@ let _ = require('../lib/translate')._;
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('lists');
     next();
@@ -21,18 +22,18 @@ router.get('/:list', (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         fields.list(list.id, (err, rows) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
             }
 
             let index = 0;
@@ -57,18 +58,18 @@ router.get('/:list/create', passport.csrfProtection, (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         fields.list(list.id, (err, rows) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
             }
 
             let data = tools.convertKeys(req.query, {
@@ -100,10 +101,10 @@ router.post('/:list/create', passport.parseForm, passport.csrfProtection, (req, 
     fields.create(req.params.list, req.body, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create custom field'));
-            return res.redirect('/fields/' + encodeURIComponent(req.params.list) + '/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list) + '/create?' + tools.queryParams(req.body));
         }
         req.flash('success', 'Custom field created');
-        res.redirect('/fields/' + encodeURIComponent(req.params.list));
+        res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
     });
 });
 
@@ -111,23 +112,23 @@ router.get('/:list/edit/:field', passport.csrfProtection, (req, res) => {
     lists.get(req.params.list, (err, list) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         if (!list) {
             req.flash('danger', _('Selected list ID not found'));
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         fields.get(req.params.field, (err, field) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
             }
 
             if (!field) {
                 req.flash('danger', _('Selected field not found'));
-                return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
             }
 
             let data = {
@@ -143,7 +144,7 @@ router.get('/:list/edit/:field', passport.csrfProtection, (req, res) => {
             fields.list(list.id, (err, rows) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+                    return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
                 }
 
                 data.groups = field.type === 'option' ? rows.filter(row => fields.grouped.indexOf(row.type) >= 0).map(row => {
@@ -168,9 +169,9 @@ router.post('/:list/edit', passport.parseForm, passport.csrfProtection, (req, re
         }
 
         if (req.body.id) {
-            return res.redirect('/fields/' + encodeURIComponent(req.params.list) + '/edit/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list) + '/edit/' + encodeURIComponent(req.body.id));
         } else {
-            return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+            return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
         }
     });
 });
@@ -185,7 +186,7 @@ router.post('/:list/delete', passport.parseForm, passport.csrfProtection, (req, 
             req.flash('info', _('Could not delete specified field'));
         }
 
-        return res.redirect('/fields/' + encodeURIComponent(req.params.list));
+        return res.redirect(config.www.baseDir + '/fields/' + encodeURIComponent(req.params.list));
     });
 });
 

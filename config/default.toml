@@ -70,6 +70,7 @@ log="dev"
 # Is the server behind a proxy? true/false
 # Set this to true if you are serving Mailtrain as a virtual domain through Nginx or Apache
 proxy=false
+baseDir=""
 # maximum POST body size
 postsize="2MB"
 # Uncomment to set uploads folder location for temporary data. Defaults to os.tmpdir()

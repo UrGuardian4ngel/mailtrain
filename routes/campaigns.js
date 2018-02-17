@@ -24,7 +24,7 @@ let uploads = multer({
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('campaigns');
     next();
@@ -49,13 +49,13 @@ router.get('/create', passport.csrfProtection, (req, res) => {
     settings.list(['defaultFrom', 'defaultAddress', 'defaultSubject'], (err, configItems) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         lists.quicklist((err, listItems) => {
             if (err) {
                 req.flash('danger', err.message || err);
-                return res.redirect('/');
+                return res.redirect(config.www.baseDir + '/');
             }
 
             if (Number(data.list)) {
@@ -74,7 +74,7 @@ router.get('/create', passport.csrfProtection, (req, res) => {
             templates.quicklist((err, templateItems) => {
                 if (err) {
                     req.flash('danger', err.message || err);
-                    return res.redirect('/');
+                    return res.redirect(config.www.baseDir + '/');
                 }
 
                 if (Number(data.template)) {
@@ -115,12 +115,12 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
     campaigns.create(req.body, false, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create campaign'));
-            return res.redirect('/campaigns/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/campaigns/create?' + tools.queryParams(req.body));
         }
         req.flash('success', util.format(_('Campaign “%s” created'), req.body.name));
         res.redirect((req.body.type === 'rss') ?
-            '/campaigns/edit/' + id :
-            '/campaigns/edit/' + id + '?tab=template'
+            config.www.baseDir + '/campaigns/edit/' + id :
+            config.www.baseDir + '/campaigns/edit/' + id + '?tab=template'
         );
     });
 });
@@ -129,7 +129,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
     campaigns.get(req.params.id, false, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
 
         campaigns.getAttachments(campaign.id, (err, attachments) => {
@@ -146,7 +146,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
                 lists.quicklist((err, listItems) => {
                     if (err) {
                         req.flash('danger', err.message || err);
-                        return res.redirect('/');
+                        return res.redirect(config.www.baseDir + '/');
                     }
 
                     if (Number(campaign.list)) {
@@ -189,7 +189,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
                     editorHelpers.getMergeTagsForResource(campaign, (err, mergeTags) => {
                         if (err) {
                             req.flash('danger', err.message || err);
-                            return res.redirect('/');
+                            return res.redirect(config.www.baseDir + '/');
                         }
 
                         campaign.mergeTags = mergeTags;
@@ -212,9 +212,9 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
         }
 
         if (req.body.id) {
-            return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
         } else {
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
     });
 });
@@ -229,7 +229,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified campaign'));
         }
 
-        return res.redirect('/campaigns');
+        return res.redirect(config.www.baseDir + '/campaigns');
     });
 });
 
@@ -269,11 +269,11 @@ router.post('/ajax', (req, res) => {
             recordsFiltered: filteredTotal,
             data: data.map((row, i) => [
                 (Number(req.body.start) || 0) + 1 + i,
-                '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="/campaigns/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
+                '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="' + config.www.baseDir + '/campaigns/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
                 htmlescape(striptags(row.description) || ''),
                 getStatusText(row),
                 '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>'
-            ].concat('<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/campaigns/edit/' + row.id + '">' + _('Edit') + '</a>'))
+            ].concat('<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/campaigns/edit/' + row.id + '">' + _('Edit') + '</a>'))
         });
     });
 });
@@ -282,7 +282,7 @@ router.get('/view/:id', passport.csrfProtection, (req, res) => {
     campaigns.get(req.params.id, true, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
 
         let getList = (listId, callback) => {
@@ -307,7 +307,7 @@ router.get('/view/:id', passport.csrfProtection, (req, res) => {
         getList(campaign.list, (err, list, testUsers) => {
             if (err) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/campaigns');
+                return res.redirect(config.www.baseDir + '/campaigns');
             }
 
             campaign.csrfToken = req.csrfToken();
@@ -367,23 +367,23 @@ router.post('/preview/:id', passport.parseForm, passport.csrfProtection, (req, r
     let subscription = req.body.subscriber;
 
     if (subscription === '_create') {
-        return res.redirect('/lists/subscription/' + encodeURIComponent(listId) + '/add/?is-test=true');
+        return res.redirect(config.www.baseDir + '/lists/subscription/' + encodeURIComponent(listId) + '/add/?is-test=true');
     }
 
-    res.redirect('/archive/' + encodeURIComponent(campaign) + '/' + encodeURIComponent(list) + '/' + encodeURIComponent(subscription) + '?track=no');
+    res.redirect(config.www.baseDir + '/archive/' + encodeURIComponent(campaign) + '/' + encodeURIComponent(list) + '/' + encodeURIComponent(subscription) + '?track=no');
 });
 
 router.get('/opened/:id', passport.csrfProtection, (req, res) => {
     campaigns.get(req.params.id, true, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
 
         lists.get(campaign.list, (err, list) => {
             if (err || !campaign) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/campaigns');
+                return res.redirect(config.www.baseDir + '/campaigns');
             }
 
             campaign.csrfToken = req.csrfToken();
@@ -419,13 +419,13 @@ router.get('/status/:id/:status', passport.csrfProtection, (req, res) => {
             break;
         default:
             req.flash('danger', _('Unknown status selector'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
     }
 
     campaigns.get(id, true, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
 
         let getList = (listId, callback) => {
@@ -445,7 +445,7 @@ router.get('/status/:id/:status', passport.csrfProtection, (req, res) => {
         getList(campaign.list, (err, list) => {
             if (err) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/campaigns');
+                return res.redirect(config.www.baseDir + '/campaigns');
             }
 
             campaign.csrfToken = req.csrfToken();
@@ -465,7 +465,7 @@ router.get('/clicked/:id/:linkId', passport.csrfProtection, (req, res) => {
     campaigns.get(req.params.id, true, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
 
         let getList = (listId, callback) => {
@@ -485,7 +485,7 @@ router.get('/clicked/:id/:linkId', passport.csrfProtection, (req, res) => {
         getList(campaign.list, (err, list) => {
             if (err) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/campaigns');
+                return res.redirect(config.www.baseDir + '/campaigns');
             }
 
             campaign.csrfToken = req.csrfToken();
@@ -559,13 +559,13 @@ router.post('/clicked/ajax/:id/:linkId', (req, res) => {
                     recordsTotal: total,
                     recordsFiltered: filteredTotal,
                     data: data.map((row, i) => [
-                        '<a href="/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
+                        '<a href="' + config.www.baseDir + '/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
                         htmlescape(row.email || ''),
                         htmlescape(row.firstName || ''),
                         htmlescape(row.lastName || ''),
                         row.created && row.created.toISOString ? '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>' : 'N/A',
                         row.count,
-                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
+                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
                     ])
                 });
             });
@@ -648,13 +648,13 @@ router.post('/status/ajax/:id/:status', (req, res) => {
                     recordsTotal: total,
                     recordsFiltered: filteredTotal,
                     data: data.map((row, i) => [
-                        '<a href="/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
+                        '<a href="' + config.www.baseDir + '/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
                         htmlescape(row.email || ''),
                         htmlescape(row.firstName || ''),
                         htmlescape(row.lastName || ''),
                         htmlescape(row.response || ''),
                         row.updated && row.created.toISOString ? '<span class="datestring" data-date="' + row.updated.toISOString() + '" title="' + row.updated.toISOString() + '">' + row.updated.toISOString() + '</span>' : 'N/A',
-                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
+                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
                     ])
                 });
             });
@@ -697,13 +697,13 @@ router.post('/clicked/ajax/:id/:linkId', (req, res) => {
                     recordsTotal: total,
                     recordsFiltered: filteredTotal,
                     data: data.map((row, i) => [
-                        '<a href="/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
+                        '<a href="' + config.www.baseDir + '/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
                         htmlescape(row.email || ''),
                         htmlescape(row.firstName || ''),
                         htmlescape(row.lastName || ''),
                         row.created && row.created.toISOString ? '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>' : 'N/A',
                         row.count,
-                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
+                        '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/lists/subscription/' + campaign.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
                     ])
                 });
             });
@@ -726,7 +726,7 @@ router.post('/quicklist/ajax', (req, res) => {
             recordsFiltered: filteredTotal,
             data: data.map((row, i) => ({
                 "0": (Number(req.body.start) || 0) + 1 + i,
-                "1": '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="/campaigns/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
+                "1": '<span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> <a href="' + config.www.baseDir + '/campaigns/view/' + row.id + '">' + htmlescape(row.name || '') + '</a>',
                 "2": htmlescape(striptags(row.description) || ''),
                 "3": '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>',
                 "DT_RowId": row.id
@@ -746,7 +746,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified campaign'));
         }
 
-        return res.redirect('/campaigns');
+        return res.redirect(config.www.baseDir + '/campaigns');
     });
 });
 
@@ -764,7 +764,7 @@ router.post('/send', passport.parseForm, passport.csrfProtection, (req, res) => 
             req.flash('info', _('Could not schedule sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -778,7 +778,7 @@ router.post('/resume', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not resume sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -792,7 +792,7 @@ router.post('/reset', passport.parseForm, passport.csrfProtection, (req, res) =>
             req.flash('info', _('Could not reset sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -806,7 +806,7 @@ router.post('/pause', passport.parseForm, passport.csrfProtection, (req, res) =>
             req.flash('info', _('Could not pause sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -820,7 +820,7 @@ router.post('/activate', passport.parseForm, passport.csrfProtection, (req, res)
             req.flash('info', _('Could not activate sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -834,7 +834,7 @@ router.post('/inactivate', passport.parseForm, passport.csrfProtection, (req, re
             req.flash('info', _('Could not pause sending'));
         }
 
-        return res.redirect('/campaigns/view/' + encodeURIComponent(req.body.id));
+        return res.redirect(config.www.baseDir + '/campaigns/view/' + encodeURIComponent(req.body.id));
     });
 });
 
@@ -842,7 +842,7 @@ router.post('/attachment', uploads.single('attachment'), passport.parseForm, pas
     campaigns.get(req.body.id, false, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
         campaigns.addAttachment(campaign.id, {
             filename: req.file.originalname,
@@ -856,7 +856,7 @@ router.post('/attachment', uploads.single('attachment'), passport.parseForm, pas
             } else {
                 req.flash('info', _('Could not store attachment'));
             }
-            return res.redirect('/campaigns/edit/' + campaign.id + '?tab=attachments');
+            return res.redirect(config.www.baseDir + '/campaigns/edit/' + campaign.id + '?tab=attachments');
         });
     });
 });
@@ -865,7 +865,7 @@ router.post('/attachment/delete', passport.parseForm, passport.csrfProtection, (
     campaigns.get(req.body.id, false, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
         campaigns.deleteAttachment(campaign.id, Number(req.body.attachment), (err, deleted) => {
             if (err) {
@@ -875,7 +875,7 @@ router.post('/attachment/delete', passport.parseForm, passport.csrfProtection, (
             } else {
                 req.flash('info', _('Could not delete attachment'));
             }
-            return res.redirect('/campaigns/edit/' + campaign.id + '?tab=attachments');
+            return res.redirect(config.www.baseDir + '/campaigns/edit/' + campaign.id + '?tab=attachments');
         });
     });
 });
@@ -884,15 +884,15 @@ router.post('/attachment/download', passport.parseForm, passport.csrfProtection,
     campaigns.get(req.body.id, false, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
         campaigns.getAttachment(campaign.id, Number(req.body.attachment), (err, attachment) => {
             if (err) {
                 req.flash('danger', err && err.message || err);
-                return res.redirect('/campaigns/edit/' + campaign.id + '?tab=attachments');
+                return res.redirect(config.www.baseDir + '/campaigns/edit/' + campaign.id + '?tab=attachments');
             } else if (!attachment) {
                 req.flash('warning', _('Attachment not found'));
-                return res.redirect('/campaigns/edit/' + campaign.id + '?tab=attachments');
+                return res.redirect(config.www.baseDir + '/campaigns/edit/' + campaign.id + '?tab=attachments');
             }
 
             res.set('Content-Disposition', 'attachment; filename="' + encodeURIComponent(attachment.filename).replace(/['()]/g, escape) + '"');
@@ -906,7 +906,7 @@ router.get('/attachment/:campaign', passport.csrfProtection, (req, res) => {
     campaigns.get(req.params.campaign, false, (err, campaign) => {
         if (err || !campaign) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
         campaign.csrfToken = req.csrfToken();
         res.render('campaigns/upload-attachment', campaign);

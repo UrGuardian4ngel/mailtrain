@@ -1,5 +1,6 @@
 'use strict';
 
+let config = require('config');
 let express = require('express');
 let router = new express.Router();
 let triggers = require('../lib/models/triggers');
@@ -16,7 +17,7 @@ let util = require('util');
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('triggers');
     next();
@@ -26,7 +27,7 @@ router.get('/', (req, res) => {
     triggers.list((err, rows) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         res.render('triggers/triggers', {
@@ -60,9 +61,9 @@ router.get('/create-select', passport.csrfProtection, (req, res, next) => {
 router.post('/create-select', passport.parseForm, passport.csrfProtection, (req, res) => {
     if (!req.body.list) {
         req.flash('danger', _('Could not find selected list'));
-        return res.redirect('/triggers/create-select');
+        return res.redirect(config.www.baseDir + '/triggers/create-select');
     }
-    res.redirect('/triggers/' + encodeURIComponent(req.body.list) + '/create');
+    res.redirect(config.www.baseDir + '/triggers/' + encodeURIComponent(req.body.list) + '/create');
 });
 
 
@@ -77,7 +78,7 @@ router.get('/:listId/create', passport.csrfProtection, (req, res, next) => {
     lists.get(req.params.listId, (err, list) => {
         if (err || !list) {
             req.flash('danger', err && err.message || err || _('Could not find selected list'));
-            return res.redirect('/triggers/create-select');
+            return res.redirect(config.www.baseDir + '/triggers/create-select');
         }
         fields.list(list.id, (err, fieldList) => {
             if (err && !fieldList) {
@@ -130,13 +131,13 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create trigger'));
             if (req.body.list) {
-                return res.redirect('/triggers/' + encodeURIComponent(req.body.list) + '/create?' + tools.queryParams(req.body));
+                return res.redirect(config.www.baseDir + '/triggers/' + encodeURIComponent(req.body.list) + '/create?' + tools.queryParams(req.body));
             } else {
-                return res.redirect('/triggers');
+                return res.redirect(config.www.baseDir + '/triggers');
             }
         }
         req.flash('success', util.format(_('Trigger “%s” created'), req.body.name));
-        res.redirect('/triggers');
+        res.redirect(config.www.baseDir + '/triggers');
     });
 });
 
@@ -144,7 +145,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
     triggers.get(req.params.id, (err, trigger) => {
         if (err || !trigger) {
             req.flash('danger', err && err.message || err || _('Could not find campaign with specified ID'));
-            return res.redirect('/campaigns');
+            return res.redirect(config.www.baseDir + '/campaigns');
         }
         trigger.csrfToken = req.csrfToken();
         trigger.days = Math.round(trigger.seconds / (24 * 3600));
@@ -152,7 +153,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res, next) => {
         lists.get(trigger.list, (err, list) => {
             if (err || !list) {
                 req.flash('danger', err && err.message || err || _('Could not find selected list'));
-                return res.redirect('/triggers');
+                return res.redirect(config.www.baseDir + '/triggers');
             }
             fields.list(list.id, (err, fieldList) => {
                 if (err && !fieldList) {
@@ -209,14 +210,14 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
     triggers.update(req.body.id, req.body, (err, updated) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/triggers/edit/' + encodeURIComponent(req.body.id));
+            return res.redirect(config.www.baseDir + '/triggers/edit/' + encodeURIComponent(req.body.id));
         } else if (updated) {
             req.flash('success', _('Trigger settings updated'));
         } else {
             req.flash('info', _('Trigger settings not updated'));
         }
 
-        return res.redirect('/triggers');
+        return res.redirect(config.www.baseDir + '/triggers');
     });
 });
 
@@ -230,7 +231,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified trigger'));
         }
 
-        return res.redirect('/triggers');
+        return res.redirect(config.www.baseDir + '/triggers');
     });
 });
 
@@ -240,7 +241,7 @@ router.get('/status/:id', passport.csrfProtection, (req, res) => {
     triggers.get(id, (err, trigger) => {
         if (err || !trigger) {
             req.flash('danger', err && err.message || err || _('Could not find trigger with specified ID'));
-            return res.redirect('/triggers');
+            return res.redirect(config.www.baseDir + '/triggers');
         }
 
         trigger.csrfToken = req.csrfToken();
@@ -289,12 +290,12 @@ router.post('/status/ajax/:id', (req, res) => {
                         recordsTotal: total,
                         recordsFiltered: filteredTotal,
                         data: data.map((row, i) => [
-                            '<a href="/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
+                            '<a href="' + config.www.baseDir + '/archive/' + encodeURIComponent(campaignCid) + '/' + encodeURIComponent(listCid) + '/' + encodeURIComponent(row.cid) + '?track=no">' + ((Number(req.body.start) || 0) + 1 + i) + '</a>',
                             htmlescape(row.email || ''),
                             htmlescape(row.firstName || ''),
                             htmlescape(row.lastName || ''),
                             '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>',
-                            '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/lists/subscription/' + trigger.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
+                            '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/lists/subscription/' + trigger.list + '/edit/' + row.cid + '">' + _('Edit') + '</a>'
                         ])
                     });
                 });

@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
     <li class="active">{{#translate}}API{{/translate}}</li>
 </ol>
 
@@ -10,7 +10,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="pull-right">
-            <form class="form-horizontal confirm-submit" {{#if accessToken}} data-confirm-message="{{#translate}}Are you sure? Resetting would invalidate the currently existing token.{{/translate}}" {{else}} data-confirm-message="{{#translate}}Are you sure?{{/translate}}" {{/if}} method="post" action="/users/api/reset-token">
+            <form class="form-horizontal confirm-submit" {{#if accessToken}} data-confirm-message="{{#translate}}Are you sure? Resetting would invalidate the currently existing token.{{/translate}}" {{else}} data-confirm-message="{{#translate}}Are you sure?{{/translate}}" {{/if}} method="post" action="{{baseDir}}/users/api/reset-token">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
                     {{#if accessToken}}

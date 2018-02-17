@@ -1,21 +1,21 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
-    <li><a href="/segments/{{list.id}}">{{#translate}}Segments{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/segments/{{list.id}}">{{#translate}}Segments{{/translate}}</a></li>
     <li class="active">{{#translate}}Edit Segment{{/translate}}</li>
 </ol>
 
-<h2>{{list.name}} <small>{{#translate}}Edit Segment{{/translate}}</small> <a class="btn btn-default btn-xs" href="/segments/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to segments{{/translate}}</a></h2>
+<h2>{{list.name}} <small>{{#translate}}Edit Segment{{/translate}}</small> <a class="btn btn-default btn-xs" href="{{baseDir}}/segments/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to segments{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="segments-delete" action="/segments/{{list.id}}/delete">
+<form method="post" class="delete-form" id="segments-delete" action="{{baseDir}}/segments/{{list.id}}/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 </form>
 
-<form class="form-horizontal" method="post" action="/segments/{{list.id}}/edit">
+<form class="form-horizontal" method="post" action="{{baseDir}}/segments/{{list.id}}/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{id}}" />
 

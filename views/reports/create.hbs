@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/reports">{{#translate}}Reports{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/reports">{{#translate}}Reports{{/translate}}</a></li>
     <li class="active">{{#translate}}Create Report{{/translate}}</li>
 </ol>
 
@@ -8,7 +8,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/reports/create">
+<form class="form-horizontal" method="post" action="{{baseDir}}/reports/create">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
 {{> report_fields }}

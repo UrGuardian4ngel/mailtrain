@@ -1,16 +1,16 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">{{#translate}}Import status{{/translate}}</li>
 </ol>
 
-<h2>{{list.name}} <small>{{#translate}}Failed addresses{{/translate}}</small> <a class="btn btn-default btn-xs" href="/lists/view/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to list{{/translate}}</a></h2>
+<h2>{{list.name}} <small>{{#translate}}Failed addresses{{/translate}}</small> <a class="btn btn-default btn-xs" href="{{baseDir}}/lists/view/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to list{{/translate}}</a></h2>
 
 <hr>
 
 <div class="well">
-    {{#translate}}Role-based addresses like postmaster@example.com are blocked when importing. Subscribers with role-based email addresses can join your list using the subscription form{{/translate}} (<a href="/subscription/{{list.cid}}">{{#translate}}see here{{/translate}}</a>).
+    {{#translate}}Role-based addresses like postmaster@example.com are blocked when importing. Subscribers with role-based email addresses can join your list using the subscription form{{/translate}} (<a href="{{baseDir}}/subscription/{{list.cid}}">{{#translate}}see here{{/translate}}</a>).
 </div>
 
 <div class="table-responsive">

@@ -1,8 +1,8 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
-    <li><a href="/fields/{{list.id}}">{{#translate}}Custom Fields{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/fields/{{list.id}}">{{#translate}}Custom Fields{{/translate}}</a></li>
     <li class="active">{{#translate}}Create Field{{/translate}}</li>
 </ol>
 
@@ -10,7 +10,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/fields/{{list.id}}/create">
+<form class="form-horizontal" method="post" action="{{baseDir}}/fields/{{list.id}}/create">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="form-group">
         <label for="name" class="col-sm-2 control-label">{{#translate}}Field Name{{/translate}}</label>

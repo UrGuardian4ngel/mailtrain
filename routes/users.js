@@ -1,5 +1,6 @@
 'use strict';
 
+let config = require('config');
 let passport = require('../lib/passport');
 let express = require('express');
 let router = new express.Router();
@@ -27,11 +28,11 @@ router.post('/forgot', passport.parseForm, passport.csrfProtection, (req, res) =
     users.sendReset(req.body.username, err => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/users/forgot');
+            return res.redirect(config.www.baseDir + '/users/forgot');
         } else {
             req.flash('success', _('An email with password reset instructions has been sent to your email address, if it exists on our system.'));
         }
-        return res.redirect('/users/login');
+        return res.redirect(config.www.baseDir + '/users/login');
     });
 });
 
@@ -39,12 +40,12 @@ router.get('/reset', passport.csrfProtection, (req, res) => {
     users.checkResetToken(req.query.username, req.query.token, (err, status) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/users/login');
+            return res.redirect(config.www.baseDir + '/users/login');
         }
 
         if (!status) {
             req.flash('danger', _('Unknown or expired reset token'));
-            return res.redirect('/users/login');
+            return res.redirect(config.www.baseDir + '/users/login');
         }
 
         res.render('users/reset', {
@@ -59,21 +60,21 @@ router.post('/reset', passport.parseForm, passport.csrfProtection, (req, res) =>
     users.resetPassword(req.body, (err, status) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/users/reset?username=' + encodeURIComponent(req.body.username) + '&token=' + encodeURIComponent(req.body['reset-token']));
+            return res.redirect(config.www.baseDir + '/users/reset?username=' + encodeURIComponent(req.body.username) + '&token=' + encodeURIComponent(req.body['reset-token']));
         } else if (!status) {
             req.flash('danger', _('Unknown or expired reset token'));
         } else {
             req.flash('success', _('Your password has been changed successfully'));
         }
 
-        return res.redirect('/users/login');
+        return res.redirect(config.www.baseDir + '/users/login');
     });
 });
 
 router.all('/api', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     next();
 });
@@ -111,14 +112,14 @@ router.post('/api/reset-token', passport.parseForm, passport.csrfProtection, (re
         } else {
             req.flash('info', _('Access token not updated'));
         }
-        return res.redirect('/users/api');
+        return res.redirect(config.www.baseDir + '/users/api');
     });
 });
 
 router.all('/account', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     next();
 });
@@ -140,7 +141,7 @@ router.post('/account', passport.parseForm, passport.csrfProtection, (req, res) 
         } else {
             req.flash('info', _('Account information not updated'));
         }
-        return res.redirect('/users/account');
+        return res.redirect(config.www.baseDir + '/users/account');
     });
 });
 

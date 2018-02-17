@@ -1,21 +1,21 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
-    <li><a href="/forms/{{list.id}}">{{#translate}}Custom Forms{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/forms/{{list.id}}">{{#translate}}Custom Forms{{/translate}}</a></li>
     <li class="active">{{#translate}}Edit Form{{/translate}}</li>
 </ol>
 
-<h2>{{list.name}} <small>{{#translate}}Edit Custom Form{{/translate}}</small> <a class="btn btn-default btn-xs" href="/forms/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to forms{{/translate}}</a></h2>
+<h2>{{list.name}} <small>{{#translate}}Edit Custom Form{{/translate}}</small> <a class="btn btn-default btn-xs" href="{{baseDir}}/forms/{{list.id}}" role="button"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> {{#translate}}Back to forms{{/translate}}</a></h2>
 
 <hr>
 
-<form method="post" class="delete-form" id="forms-delete" action="/forms/{{list.id}}/delete">
+<form method="post" class="delete-form" id="forms-delete" action="{{baseDir}}/forms/{{list.id}}/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{form.id}}">
 </form>
 
-<form class="form-horizontal" method="post" id="forms-update" action="/forms/{{list.id}}/edit">
+<form class="form-horizontal" method="post" id="forms-update" action="{{baseDir}}/forms/{{list.id}}/edit">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="id" value="{{form.id}}">
     <input type="hidden" name="fields_shown_on_subscribe" value="{{form.fieldsShownOnSubscribe}}">
@@ -44,26 +44,26 @@
                 </small>
             </div>
             <p>
-                <a href="/subscription/{{list.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Subscribe{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Subscribe{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/confirm-subscription-notice?fid={{form.id}}" target="_blank">{{#translate}}Confirm Subscription Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/confirm-subscription-notice?fid={{form.id}}" target="_blank">{{#translate}}Confirm Subscription Notice{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/confirm-unsubscription-notice?fid={{form.id}}" target="_blank">{{#translate}}Confirm Unsubscription Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/confirm-unsubscription-notice?fid={{form.id}}" target="_blank">{{#translate}}Confirm Unsubscription Notice{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/subscribed-notice?fid={{form.id}}" target="_blank">{{#translate}}Subscribed Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/subscribed-notice?fid={{form.id}}" target="_blank">{{#translate}}Subscribed Notice{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/updated-notice?fid={{form.id}}" target="_blank">{{#translate}}Updated Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/updated-notice?fid={{form.id}}" target="_blank">{{#translate}}Updated Notice{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/unsubscribed-notice?fid={{form.id}}" target="_blank">{{#translate}}Unsubscribed Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/unsubscribed-notice?fid={{form.id}}" target="_blank">{{#translate}}Unsubscribed Notice{{/translate}}</a>
                 |
-                <a href="/subscription/{{list.cid}}/manual-unsubscribe-notice?fid={{form.id}}" target="_blank">{{#translate}}Manual Unsubscribe Notice{{/translate}}</a>
+                <a href="{{baseDir}}/subscription/{{list.cid}}/manual-unsubscribe-notice?fid={{form.id}}" target="_blank">{{#translate}}Manual Unsubscribe Notice{{/translate}}</a>
                 {{#if testUsers}}
                     |
-                    <a href="/subscription/{{list.cid}}/unsubscribe/{{testUsers.0.cid}}?fid={{form.id}}&formTest=1" target="_blank">{{#translate}}Unsubscribe{{/translate}}</a>
+                    <a href="{{baseDir}}/subscription/{{list.cid}}/unsubscribe/{{testUsers.0.cid}}?fid={{form.id}}&formTest=1" target="_blank">{{#translate}}Unsubscribe{{/translate}}</a>
                     |
-                    <a href="/subscription/{{list.cid}}/manage/{{testUsers.0.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Manage{{/translate}}</a>
+                    <a href="{{baseDir}}/subscription/{{list.cid}}/manage/{{testUsers.0.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Manage{{/translate}}</a>
                     |
-                    <a href="/subscription/{{list.cid}}/manage-address/{{testUsers.0.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Manage Address{{/translate}}</a>
+                    <a href="{{baseDir}}/subscription/{{list.cid}}/manage-address/{{testUsers.0.cid}}?fid={{form.id}}" target="_blank">{{#translate}}Manage Address{{/translate}}</a>
                 {{else}}
                     |
                     <small class="text-muted">{{#translate}}Create a test user for additional options{{/translate}}</small>
@@ -263,7 +263,7 @@
 </form>
 
 
-<script src="/javascript/cookie.2.1.3.js"></script>
+<script src="{{baseDir}}/javascript/cookie.2.1.3.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 

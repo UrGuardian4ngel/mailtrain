@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/triggers">{{#translate}}Automation Triggers{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/triggers">{{#translate}}Automation Triggers{{/translate}}</a></li>
     <li class="active">{{#translate}}Triggered{{/translate}} {{name}}</li>
 </ol>
 
@@ -19,7 +19,7 @@
         <div class="panel-heading">{{#translate}}Subscribers who caused this trigger to fire{{/translate}}:</div>
         <div class="panel-body">
             <div class="table-responsive">
-                <table data-topic-url="/triggers/status" data-topic-id="{{id}}" data-sort-column="4" data-sort-order="desc" class="table table-bordered table-hover data-table-ajax display nowrap" width="100%" data-row-sort="0,1,1,1,1,0">
+                <table data-topic-url="{{baseDir}}/triggers/status" data-topic-id="{{id}}" data-sort-column="4" data-sort-order="desc" class="table table-bordered table-hover data-table-ajax display nowrap" width="100%" data-row-sort="0,1,1,1,1,0">
                     <thead>
                         <tr>
                             <th class="col-md-1">

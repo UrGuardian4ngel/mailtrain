@@ -1,5 +1,6 @@
 'use strict';
 
+const config = require('config');
 const express = require('express');
 const passport = require('../lib/passport');
 const router = new express.Router();
@@ -18,7 +19,7 @@ const allowedMimeTypes = {
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('reports');
     next();
@@ -48,7 +49,7 @@ router.post('/ajax', (req, res) => {
                 htmlescape(row.name || ''),
                 htmlescape(striptags(row.description) || ''),
                 '<span class="datestring" data-date="' + row.created.toISOString() + '" title="' + row.created.toISOString() + '">' + row.created.toISOString() + '</span>',
-                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="/report-templates/edit/' + row.id + '"> ' + _('Edit') + '</a>']
+                '<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span><a href="' + config.www.baseDir + '/report-templates/edit/' + row.id + '"> ' + _('Edit') + '</a>']
             )
         });
     });
@@ -244,10 +245,10 @@ router.post('/create', passport.parseForm, passport.csrfProtection, (req, res) =
     reportTemplates.createOrUpdate(true, req.body, (err, id) => {
         if (err || !id) {
             req.flash('danger', err && err.message || err || _('Could not create report template'));
-            return res.redirect('/report-templates/create?' + tools.queryParams(req.body));
+            return res.redirect(config.www.baseDir + '/report-templates/create?' + tools.queryParams(req.body));
         }
         req.flash('success', util.format(_('Report template “%s” created'), req.body.name));
-        res.redirect('/report-templates');
+        res.redirect(config.www.baseDir + '/report-templates');
     });
 });
 
@@ -255,7 +256,7 @@ router.get('/edit/:id', passport.csrfProtection, (req, res) => {
     reportTemplates.get(req.params.id, (err, template) => {
         if (err || !template) {
             req.flash('danger', err && err.message || err || _('Could not find report template with specified ID'));
-            return res.redirect('/report-templates');
+            return res.redirect(config.www.baseDir + '/report-templates');
         }
 
         template.csrfToken = req.csrfToken();
@@ -283,9 +284,9 @@ router.post('/edit', passport.parseForm, passport.csrfProtection, (req, res) => 
         }
 
         if (req.body['submit'] == 'update-and-stay') {
-            return res.redirect('/report-templates/edit/' + req.body.id);
+            return res.redirect(config.www.baseDir + '/report-templates/edit/' + req.body.id);
         } else {
-            return res.redirect('/report-templates');
+            return res.redirect(config.www.baseDir + '/report-templates');
         }
     });
 });
@@ -300,7 +301,7 @@ router.post('/delete', passport.parseForm, passport.csrfProtection, (req, res) =
             req.flash('info', _('Could not delete specified report template'));
         }
 
-        return res.redirect('/report-templates');
+        return res.redirect(config.www.baseDir + '/report-templates');
     });
 });
 

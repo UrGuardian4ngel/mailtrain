@@ -6,7 +6,7 @@
             {{#if ../isManagePreferences}}
                 <div class="input-group">
                     <input type="email" name="email" id="email" placeholder="" value="{{../email}}" readonly>
-                    <div class="input-group-addon"><a href="/subscription/{{../lcid}}/manage-address/{{../cid}}">{{#translate}}want to change it?{{/translate}}</a></div>
+                    <div class="input-group-addon"><a href="{{baseDir}}/subscription/{{../lcid}}/manage-address/{{../cid}}">{{#translate}}want to change it?{{/translate}}</a></div>
                 </div>
             {{else}}
                 <input type="email" name="email" id="email" placeholder="" value="{{../email}}" required>

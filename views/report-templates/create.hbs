@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/reports">{{#translate}}Reports{{/translate}}</a></li>
-    <li><a href="/report-templates">{{#translate}}Templates{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/reports">{{#translate}}Reports{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/report-templates">{{#translate}}Templates{{/translate}}</a></li>
     <li class="active">{{#translate}}Create Template{{/translate}}</li>
 </ol>
 
@@ -9,7 +9,7 @@
 
 <hr>
 
-<form class="form-horizontal" method="post" action="/report-templates/create">
+<form class="form-horizontal" method="post" action="{{baseDir}}/report-templates/create">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
 {{> report_template_fields }}

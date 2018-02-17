@@ -12,7 +12,7 @@ let editorHelpers = require('../lib/editor-helpers');
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     next();
 });
@@ -21,7 +21,7 @@ router.get('/editor', passport.csrfProtection, (req, res) => {
     editorHelpers.getResource(req.query.type, req.query.id, (err, resource) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
 
         let getLanguageStrings = language => {

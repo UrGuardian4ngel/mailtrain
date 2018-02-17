@@ -1,12 +1,12 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
-    <li><a href="/lists/">{{#translate}}Lists{{/translate}}</a></li>
-    <li><a href="/lists/view/{{list.id}}">{{list.name}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/">{{#translate}}Lists{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/lists/view/{{list.id}}">{{list.name}}</a></li>
     <li class="active">{{#translate}}Segments{{/translate}}</li>
 </ol>
 
 <div class="pull-right">
-    <a class="btn btn-primary" href="/segments/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Segment{{/translate}}</a>
+    <a class="btn btn-primary" href="{{baseDir}}/segments/{{list.id}}/create" role="button"><i class="glyphicon glyphicon-plus"></i> {{#translate}}Create Segment{{/translate}}</a>
 </div>
 
 <h2>{{list.name}} <small>{{#translate}}Segments{{/translate}}</small></h2>
@@ -38,14 +38,14 @@
                         </th>
                         <td>
                             <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-                            <a href="/segments/{{../list.id}}/view/{{id}}">{{name}}</a>
+                            <a href="{{baseDir}}/segments/{{../list.id}}/view/{{id}}">{{name}}</a>
                         </td>
                         <td>
                             {{type}}
                         </td>
                         <td>
                             <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                            <a href="/segments/{{../list.id}}/edit/{{id}}">
+                            <a href="{{baseDir}}/segments/{{../list.id}}/edit/{{id}}">
                             {{#translate}}Edit{{/translate}}
                         </a>
                         </td>

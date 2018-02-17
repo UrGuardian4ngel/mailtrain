@@ -5,7 +5,7 @@
         {{#each attachments}}
             <li class="list-group-item">
                 <span class="badge">{{size}}</span>
-                <form method="post" action="/archive/attachment/download">
+                <form method="post" action="{{baseDir}}/archive/attachment/download">
                     <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                     <input type="hidden" name="campaign" value="{{../campaign.cid}}" />
                     <input type="hidden" name="list" value="{{../list.cid}}" />

@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-    <li><a href="/">{{#translate}}Home{{/translate}}</a></li>
+    <li><a href="{{baseDir}}/">{{#translate}}Home{{/translate}}</a></li>
     <li class="active">{{#translate}}Account{{/translate}}</li>
 </ol>
 
@@ -14,7 +14,7 @@
         <br/> {{#translate}}Associated Email Address{{/translate}}: <a href="mailto:{{email}}">{{email}}</a>
     </p>
 {{else}}
-    <form class="form-horizontal" method="post" action="/users/account">
+    <form class="form-horizontal" method="post" action="{{baseDir}}/users/account">
 
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
 

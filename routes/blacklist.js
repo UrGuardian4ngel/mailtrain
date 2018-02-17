@@ -1,4 +1,6 @@
 'use strict';
+
+let config = require('config');
 let express = require('express');
 let router = new express.Router();
 let passport = require('../lib/passport');
@@ -11,7 +13,7 @@ let _ = require('../lib/translate')._;
 router.all('/*', (req, res, next) => {
     if (!req.user) {
         req.flash('danger', _('Need to be logged in to access restricted content'));
-        return res.redirect('/users/login?next=' + encodeURIComponent(req.originalUrl));
+        return res.redirect(config.www.baseDir + '/users/login?next=' + encodeURIComponent(req.originalUrl));
     }
     res.setSelectedMenu('blacklist');
     next();
@@ -28,7 +30,7 @@ router.post('/ajax/', (req, res) => {
     blacklist.get(start, limit, search, (err, data, total) => {
         if (err) {
             req.flash('danger', err.message || err);
-            return res.redirect('/');
+            return res.redirect(config.www.baseDir + '/');
         }
         res.json({
             draw: req.body.draw,
