@@ -285,7 +285,7 @@
 
             var form = document.getElementById('settings-form');
             var formData = new FormData(form);
-            var result = fetch('/settings/smtp-verify', {
+            var result = fetch(smtpForm.getAttribute('action'), {
                 method: 'POST',
                 body: formData,
                 credentials: 'same-origin'
