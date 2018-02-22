@@ -20,7 +20,7 @@
 <form method="post" id="subscriber-blacklist" action="{{baseDir}}/blacklist/ajax/add">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input type="hidden" name="email" value="{{email}}">
-    <input type="hidden" name="next" value="/lists/view/{{list.id}}">
+    <input type="hidden" name="next" value="{{baseDir}}/lists/view/{{list.id}}">
 </form>
 
 <form method="post" class="delete-form" id="subscriber-delete" action="{{baseDir}}/lists/subscription/delete">

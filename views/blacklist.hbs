@@ -7,7 +7,7 @@
 
 <form class="form-horizontal" method="post" action="{{baseDir}}/blacklist/ajax/add">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <input type="hidden" name="next" value="/blacklist">
+    <input type="hidden" name="next" value="{{baseDir}}/blacklist">
     <div class="form-group">
         <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control input-md" name="email" id="add-email-input" value="" placeholder="{{#translate}}Add email to blacklist{{/translate}}">
@@ -19,7 +19,7 @@
 
 <form class="form-horizontal" id="delete-email-form" method="post" action="{{baseDir}}/blacklist/ajax/delete">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <input type="hidden" name="next" value="/blacklist">
+    <input type="hidden" name="next" value="{{baseDir}}/blacklist">
     <input type="hidden" name="email" id="delete-email-input" value="">
 </form>
 
